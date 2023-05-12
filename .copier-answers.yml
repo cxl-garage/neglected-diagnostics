@@ -1,0 +1,15 @@
+# Changes here will be overwritten by Copier
+_commit: v1.3.3
+_src_path: gh:lincc-frameworks/python-project-template
+author_email: aniketf@uw.edu
+author_name: Aniket Fadia
+create_example_module: true
+custom_install: false
+include_notebooks: true
+module_name: genetic_testing
+mypy_type_checking: none
+preferred_linter: pylint
+project_license: MIT
+project_name: neglected-diagnostics
+use_gitlfs: none
+use_isort: true
