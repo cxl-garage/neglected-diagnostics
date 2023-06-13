@@ -5,16 +5,9 @@ to build a quick prototype. So, I am first focusing on building a quick prototyp
 things end to end and then work towards improving individual modules.
 """
 
-#import os
-#import sys
-
-#current_dir = os.path.dirname(os.path.abspath(__file__))
-#sys.path.append(os.path.join(current_dir, 'routers'))
-
-# pylint: disable=C0413
 import streamlit as st
 
-from .routers import ncbi
+from genetic_testing.routers import ncbi
 
 st.title("Neglected Diagnostics: Perform Genetic Testing At Scale!")
 

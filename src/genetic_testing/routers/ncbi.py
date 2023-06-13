@@ -1,16 +1,31 @@
+"""Module to search and download sequence data from the NCBI datasource. 
+
+This module is still work in progress. Currently, I am working on implementing the search 
+functionality
+"""
+
+from typing import List
+
 from Bio import Entrez
 
-# Entrez.api_key = ""  # Add your API Key
-Entrez.email = "aniketf@uw.edu"  # Add your email address
 
-# TODO: Add docstrings and comments
-def get(operation, db, term):
-    handle = None
-    record = None
-    if operation == "Search":
-        handle = Entrez.esearch(db=db, term=term)
+def search(database: str, term: str) -> List[int]:
+    """Get the List of UIDs matching the Entrez query.
 
+    This function searches the provided NCBI database and returns the list of UIDs matching the 
+    Entrez query.  
+
+    Args:
+        database (str): Name of the Entrez database.
+        term (str): Entrez text query.
+
+    Returns:
+        List[int]: A list of UIDs.
+    """
+    handle = Entrez.esearch(db=database, term=term)
+    uids = []
     if handle:
         record = Entrez.read(handle)
-    
-    return record
+        uids = record['IdList']
+
+    return uids
