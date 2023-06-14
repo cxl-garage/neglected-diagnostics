@@ -1,0 +1,2 @@
+biopython
+git+https://github.com/uw-ssec/neglected-diagnostics.git
