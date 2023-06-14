@@ -4,10 +4,18 @@ This module is still work in progress. Currently, I am working on implementing t
 functionality
 """
 
+import os
 from typing import List
 
+import streamlit as st
 from Bio import Entrez
 
+ENTREZ_EMAIL = 'ENTREZ_EMAIL'
+
+if ENTREZ_EMAIL in st.secrets:
+    Entrez.email = st.secrets[ENTREZ_EMAIL]
+else:
+    Entrez.email = os.environ.get(ENTREZ_EMAIL, '')
 
 def search(database: str, term: str) -> List[int]:
     """Get the List of UIDs matching the Entrez query.
