@@ -5,7 +5,7 @@ functionality
 """
 
 import os
-from typing import Dict, List
+from typing import Dict, List, Union
 
 import streamlit as st
 from Bio import Entrez
@@ -41,7 +41,7 @@ def search(database: str, term: str) -> List[int]:
     return uids
 
 # pylint: disable=E1131
-def summary(database: str, ids: int | List[int]) -> DictionaryElement:
+def summary(database: str, ids: Union[int, List[int]]) -> DictionaryElement:
     """Get the document summaries for the input UIDs.
 
     This function returns the document summaries for the input list of UIDs and datasource.  
@@ -75,7 +75,7 @@ def parse_summary(document_summaries: ListElement) -> List[Dict[str, str]]:
     return parsed_summaries
 
 # pylint: disable=E1131
-def fetch(database: str, ids: int | List[int]) -> DictionaryElement:
+def fetch(database: str, ids: Union[int, List[int]]) -> DictionaryElement:
     """Download the document summaries for the input UIDs.
 
     This function downloads the document summaries for the input list of UIDs and datasource.  
