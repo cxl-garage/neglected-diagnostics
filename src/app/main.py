@@ -14,8 +14,9 @@ st.title("Neglected Diagnostics: Perform Genetic Testing At Scale!")
 database = st.selectbox("Select the database to search", ("gene", "nucleotide"))
 term = st.text_input(
     label="Enter the search term",
-    placeholder="Example: human[organism] AND topoisomerase[protein name]")
+    placeholder="Example: human[organism] AND topoisomerase[protein name]",
+)
 
-if st.button('Perform Operation'):
+if st.button("Perform Operation"):
     data = ncbi.search(database, term)
     st.write(data)
