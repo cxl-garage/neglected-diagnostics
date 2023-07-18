@@ -5,18 +5,39 @@ to build a quick prototype. So, I am first focusing on building a quick prototyp
 things end to end and then work towards improving individual modules.
 """
 
+from typing import List
+
+import pandas as pd
 import streamlit as st
 
+from app.frontend.aggrid_table import aggrid_table
+from app.frontend.filter_dataframe import filter_dataframe
+from app.utils import preprocessing, setup
+from app.utils.constants import NCBI_DF, NCBI_DF_FILTER, NCBI_SUMMARY_FORM
 from genetic_testing.routers import ncbi
 
+setup.initialize()
+
 st.title("Neglected Diagnostics: Perform Genetic Testing At Scale!")
+with st.form("query"):
+    database = st.selectbox("Select the database to search", ("nucleotide", "gene"))
+    search_term = st.text_input(
+        label="Enter the search term",
+        placeholder="Example: human[organism] AND topoisomerase[protein name]",
+    )
+    submitted = st.form_submit_button("Submit")
+    if submitted:
+        st.session_state[NCBI_SUMMARY_FORM] = True
+        st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
+        print(f"Number of rows in NCBI Summary: {len(st.session_state[NCBI_DF])}")
+        preprocessing.format_ncbi_summary()
 
-database = st.selectbox("Select the database to search", ("gene", "nucleotide"))
-term = st.text_input(
-    label="Enter the search term",
-    placeholder="Example: human[organism] AND topoisomerase[protein name]",
-)
+df_aggrid = pd.DataFrame()
+if st.session_state[NCBI_SUMMARY_FORM]:
+    grid_table = aggrid_table()
+    df_aggrid = grid_table["data"]
 
-if st.button("Perform Operation"):
-    data = ncbi.search(database, term)
-    st.write(data)
+df_filtered = filter_dataframe(df_aggrid)
+if st.session_state[NCBI_DF_FILTER]:
+    st.dataframe(df_filtered)
+    st.write(f"Size of final dataframe: {len(df_filtered)}")
