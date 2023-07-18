@@ -122,7 +122,6 @@ def get_data(database: str, search_term: str) -> pd.DataFrame:
     -------
     pd.DataFrame
         A pandas DataFrame containing the retrieved data.
-
     """
     uids = _search(database, search_term)
     print(f"Total number of documents returned for the above search query: {len(uids)}")
