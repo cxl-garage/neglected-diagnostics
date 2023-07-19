@@ -6,11 +6,14 @@ functionality
 
 import os
 from typing import Dict, List
-
 import pandas as pd
 import streamlit as st
 from Bio import Entrez
 from Bio.Entrez.Parser import DictionaryElement, ListElement, StringElement
+
+from utils.log import _init_logger
+
+logger = _init_logger(__name__)
 
 ENTREZ_EMAIL = "ENTREZ_EMAIL"
 NCBI_SUMMARY_FIELDS = [
@@ -124,7 +127,9 @@ def get_data(database: str, search_term: str) -> pd.DataFrame:
         A pandas DataFrame containing the retrieved data.
     """
     uids = _search(database, search_term)
-    print(f"Total number of documents returned for the above search query: {len(uids)}")
+    logger.info(
+        f"Total number of documents returned for database = '{database}' and search query = '{search_term}' is {len(uids)}"
+    )
     document_summaries = _summary(database, uids)
     parsed_summaries = _parse_summary(document_summaries)
     df_summaries = pd.DataFrame.from_dict(parsed_summaries)
