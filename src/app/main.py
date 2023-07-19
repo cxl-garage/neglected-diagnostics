@@ -10,10 +10,10 @@ from typing import List
 import pandas as pd
 import streamlit as st
 
+from app.common import preprocessing, setup
+from app.common.constants import NCBI_DF, NCBI_DF_FILTER, NCBI_SUMMARY_FORM
 from app.frontend.aggrid_table import aggrid_table
 from app.frontend.filter_dataframe import filter_dataframe
-from app.utils import preprocessing, setup
-from app.utils.constants import NCBI_DF, NCBI_DF_FILTER, NCBI_SUMMARY_FORM
 from genetic_testing.routers import ncbi
 
 setup.initialize()
@@ -29,15 +29,14 @@ with st.form("query"):
     if submitted:
         st.session_state[NCBI_SUMMARY_FORM] = True
         st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
-        print(f"Number of rows in NCBI Summary: {len(st.session_state[NCBI_DF])}")
         preprocessing.format_ncbi_summary()
 
 df_aggrid = pd.DataFrame()
 if st.session_state[NCBI_SUMMARY_FORM]:
-    grid_table = aggrid_table()
-    df_aggrid = grid_table["data"]
+    aggrid_table = aggrid_table()
+    df_aggrid = aggrid_table["data"]
 
 df_filtered = filter_dataframe(df_aggrid)
 if st.session_state[NCBI_DF_FILTER]:
     st.dataframe(df_filtered)
-    st.write(f"Size of final dataframe: {len(df_filtered)}")
+    st.write(f"Size of final data: {len(df_filtered)}")
