@@ -29,4 +29,4 @@ def _init_logger(name: str) -> logging.Logger:
     STREAM_HANDLER.set_name(STDOUT_NAME)
     STREAM_HANDLER.setFormatter(LOG_FORMATTER)
     logger.addHandler(STREAM_HANDLER)
-    return logger 
+    return logger

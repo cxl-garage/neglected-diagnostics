@@ -6,6 +6,7 @@ functionality
 
 import os
 from typing import Dict, List
+
 import pandas as pd
 import streamlit as st
 from Bio import Entrez
