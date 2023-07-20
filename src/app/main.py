@@ -35,7 +35,7 @@ with st.form("query"):
 
 df_aggrid = pd.DataFrame()
 if st.session_state[NCBI_SUMMARY_FORM]:
-    aggrid_table = aggrid_table()   # Initialize and Render Aggrid Table
+    aggrid_table = aggrid_table()  # Initialize and Render Aggrid Table
     df_aggrid = aggrid_table["data"]
 
 # Streamlit UI to filter the dataset
