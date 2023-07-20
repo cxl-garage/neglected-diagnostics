@@ -59,8 +59,10 @@ def aggrid_table() -> Dict:
 
     Notes
     -----
-    Before calling this function, ensure that you have stored your DataFrame in the
+    - Before calling this function, ensure that you have stored your DataFrame in the
     Streamlit session state using the key specified by the constant `NCBI_DF`. The table will be created using the data from this DataFrame.
+
+    - `enable_enterprise_modules` should be set to False to be eligible to use the Open-Source version of `aggrid`. Refer here for more details - https://www.ag-grid.com/javascript-data-grid/licensing/
     """
     grid_options = _initialize_grid_options()
     grid_table = AgGrid(

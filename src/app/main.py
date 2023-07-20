@@ -16,9 +16,11 @@ from app.frontend.aggrid_table import aggrid_table
 from app.frontend.filter_dataframe import filter_dataframe
 from genetic_testing.routers import ncbi
 
+# Initialize the Streamlit session state keys
 setup.initialize()
 
 st.title("Neglected Diagnostics: Perform Genetic Testing At Scale!")
+# Streamlit form to capture search conditions
 with st.form("query"):
     database = st.selectbox("Select the database to search", ("nucleotide", "gene"))
     search_term = st.text_input(
@@ -33,9 +35,10 @@ with st.form("query"):
 
 df_aggrid = pd.DataFrame()
 if st.session_state[NCBI_SUMMARY_FORM]:
-    aggrid_table = aggrid_table()
+    aggrid_table = aggrid_table()   # Initialize and Render Aggrid Table
     df_aggrid = aggrid_table["data"]
 
+# Streamlit UI to filter the dataset
 df_filtered = filter_dataframe(df_aggrid)
 if st.session_state[NCBI_DF_FILTER]:
     st.dataframe(df_filtered)
