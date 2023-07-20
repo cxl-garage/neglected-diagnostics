@@ -3,7 +3,7 @@ import streamlit as st
 from app.common.constants import NCBI_DF
 
 
-def format_ncbi_summary():
+def format_ncbi_summary() -> None:
     """Format and restructure the NCBI summary DataFrame.
 
     This function performs formatting and restructuring tasks on the NCBI summary DataFrame, which is assumed to be stored in the Streamlit session state under the key specified by the constant `NCBI_DF`. The function performs the following actions:
