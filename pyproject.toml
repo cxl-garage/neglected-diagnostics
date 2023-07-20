@@ -50,3 +50,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.setuptools_scm]
 write_to = "src/genetic_testing/_version.py"
+
+[tool.isort]
+profile = "black"
+filter_files = true
