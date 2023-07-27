@@ -5,11 +5,12 @@ functionality
 """
 
 import os
+from io import StringIO
 from typing import Dict, List
 
 import pandas as pd
 import streamlit as st
-from Bio import Entrez
+from Bio import Entrez, SeqIO
 from Bio.Entrez.Parser import DictionaryElement, ListElement, StringElement
 
 from utils.log import _init_logger
@@ -135,3 +136,37 @@ def get_data(database: str, search_term: str) -> pd.DataFrame:
     parsed_summaries = _parse_summary(document_summaries)
     df_summaries = pd.DataFrame.from_dict(parsed_summaries)
     return df_summaries
+
+
+def fetch_data(database: str, ids: List[int]) -> StringIO:
+    """Download the sequence data for the input UIDs from the specified Entrez database.
+
+    Parameters
+    ----------
+    database : str
+        Name of the Entrez database from which the sequence data will be fetched.
+    ids : List[int]
+        List of UIDs.
+
+    Returns
+    -------
+    StringIO
+        A StringIO object containing the fetched sequence data in FASTA format.
+
+    Notes
+    -----
+    This function uses the Entrez.efetch method from the Biopython library to retrieve sequence data from the specified Entrez database based on the provided list of UIDs. The data is fetched in FASTA format. The function returns a StringIO object that contains the fetched sequence data.
+    """
+    handle = Entrez.efetch(
+        db=database, id=ids, retmax=10000, rettype="fasta", retmode="text"
+    )
+    if handle:
+        sequences_iterator = SeqIO.parse(handle, "fasta")
+        sequences_str_buffer = StringIO()
+        # Write the data to the StringIO object in FASTA format
+        SeqIO.write(sequences_iterator, sequences_str_buffer, "fasta")
+        # Reset the file position indicator to the beginning
+        sequences_str_buffer.seek(0)
+        handle.close()
+
+    return sequences_str_buffer

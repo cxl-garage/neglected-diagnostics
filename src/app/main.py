@@ -13,6 +13,7 @@ import streamlit as st
 from app.common import preprocessing, setup
 from app.common.constants import NCBI_DF, NCBI_DF_FILTER, NCBI_SUMMARY_FORM
 from app.frontend.aggrid_table import aggrid_table
+from app.frontend.download_data import download_data
 from app.frontend.filter_dataframe import filter_dataframe
 from genetic_testing.routers import ncbi
 
@@ -43,3 +44,6 @@ df_filtered = filter_dataframe(df_aggrid)
 if st.session_state[NCBI_DF_FILTER]:
     st.dataframe(df_filtered)
     st.write(f"Size of final data: {len(df_filtered)}")
+
+    if st.button("Prepare Download"):
+        download_data(database, df_filtered["Id"].unique(), search_term)
