@@ -29,8 +29,8 @@ NCBI_SUMMARY_FIELDS = [
     "Status",
 ]
 RETMAX = 10000
-RETTYPE = "fasta"
-RETMODE = "text"
+RETTYPE = "fasta"  # Specifies the record view returned, such as Abstract or MEDLINE from PubMed, or GenPept or FASTA from protein.
+RETMODE = "text"  # Specifies the data format of the records returned, such as plain text, HMTL or XML.
 
 if ENTREZ_EMAIL in st.secrets:
     Entrez.email = st.secrets[ENTREZ_EMAIL]
