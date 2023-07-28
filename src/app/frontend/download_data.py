@@ -1,5 +1,6 @@
-import streamlit as st
 from typing import List
+
+import streamlit as st
 
 from genetic_testing.routers import ncbi
 
@@ -40,4 +41,8 @@ def download_data(database: str, ids: List[int], search_term: str) -> None:
             )
         else:
             st.write("Fetched Data Successfully!")
-            st.download_button(label="Download", data=file_str, file_name="data.fasta")
+            st.download_button(
+                label="Download",
+                data=file_str,
+                file_name=f"{database}_{search_term}.fasta",
+            )
