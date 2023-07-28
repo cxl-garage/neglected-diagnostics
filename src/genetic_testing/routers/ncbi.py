@@ -29,6 +29,8 @@ NCBI_SUMMARY_FIELDS = [
     "Status",
 ]
 RETMAX = 10000
+RETTYPE = "fasta"
+RETMODE = "text"
 
 if ENTREZ_EMAIL in st.secrets:
     Entrez.email = st.secrets[ENTREZ_EMAIL]
@@ -81,7 +83,7 @@ def _summary(
     ListElement[DictionaryElement]
         A list of dictionaries where each dictionary element is a single summary
     """
-    handle = Entrez.esummary(db=database, id=ids, retmax=10000)
+    handle = Entrez.esummary(db=database, id=ids, retmax=RETMAX)
     if handle:
         record = Entrez.read(handle)
         handle.close()
@@ -158,13 +160,13 @@ def fetch_data(database: str, ids: List[int]) -> StringIO:
     This function uses the Entrez.efetch method from the Biopython library to retrieve sequence data from the specified Entrez database based on the provided list of UIDs. The data is fetched in FASTA format. The function returns a StringIO object that contains the fetched sequence data.
     """
     handle = Entrez.efetch(
-        db=database, id=ids, retmax=10000, rettype="fasta", retmode="text"
+        db=database, id=ids, retmax=RETMAX, rettype=RETTYPE, retmode=RETMODE
     )
     if handle:
-        sequences_iterator = SeqIO.parse(handle, "fasta")
+        sequences_iterator = SeqIO.parse(handle, RETTYPE)
         sequences_str_buffer = StringIO()
         # Write the data to the StringIO object in FASTA format
-        SeqIO.write(sequences_iterator, sequences_str_buffer, "fasta")
+        SeqIO.write(sequences_iterator, sequences_str_buffer, RETTYPE)
         # Reset the file position indicator to the beginning
         sequences_str_buffer.seek(0)
         handle.close()
