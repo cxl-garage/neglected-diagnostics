@@ -5,11 +5,15 @@ This module will test NCBI functionalities like search, summary, and fetch.
 """
 
 from http.client import HTTPResponse
+from io import StringIO
 from unittest.mock import MagicMock, patch
 
 import pytest
 
 from genetic_testing.routers import ncbi
+from genetic_testing.routers.ncbi import RETMAX, RETMODE, RETTYPE
+
+SAMPLE_FASTA_DATA = ">OQ443159.1 Panthera onca isolate 4766 large subunit ribosomal RNA gene, partial sequence; mitochondrial CATTTGTTCCT"
 
 
 @pytest.fixture
@@ -87,7 +91,19 @@ def test_get_data(
 
     # Assert that the mock functions were called with the correct arguments
     mock_esearch.assert_called_once_with(
-        db="database", term="search_term", retmax=10000
+        db="database", term="search_term", retmax=RETMAX
     )
-    mock_esummary.assert_called_once_with(db="database", id=["1"], retmax=10000)
+    mock_esummary.assert_called_once_with(db="database", id=["1"], retmax=RETMAX)
     mock_parser_read.assert_called()
+
+
+@patch("Bio.Entrez.efetch")
+def test_download_data(mock_efetch: MagicMock):
+    mock_efetch.return_value = StringIO(SAMPLE_FASTA_DATA)
+    sequences_str_buffer = ncbi.fetch_data("database", [1])
+    # Verify that the result is a StringIO object
+    assert isinstance(sequences_str_buffer, StringIO)
+    # Assert that the Bio.Entrez.efetch function was called with the correct arguments
+    mock_efetch.assert_called_once_with(
+        db="database", id=[1], retmax=RETMAX, rettype=RETTYPE, retmode=RETMODE
+    )

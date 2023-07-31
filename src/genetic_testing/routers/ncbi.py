@@ -5,11 +5,12 @@ functionality
 """
 
 import os
+from io import StringIO
 from typing import Dict, List
 
 import pandas as pd
 import streamlit as st
-from Bio import Entrez
+from Bio import Entrez, SeqIO
 from Bio.Entrez.Parser import DictionaryElement, ListElement, StringElement
 
 from utils.log import _init_logger
@@ -28,6 +29,8 @@ NCBI_SUMMARY_FIELDS = [
     "Status",
 ]
 RETMAX = 10000
+RETTYPE = "fasta"  # Specifies the record view returned, such as Abstract or MEDLINE from PubMed, or GenPept or FASTA from protein.
+RETMODE = "text"  # Specifies the data format of the records returned, such as plain text, HMTL or XML.
 
 if ENTREZ_EMAIL in st.secrets:
     Entrez.email = st.secrets[ENTREZ_EMAIL]
@@ -80,7 +83,7 @@ def _summary(
     ListElement[DictionaryElement]
         A list of dictionaries where each dictionary element is a single summary
     """
-    handle = Entrez.esummary(db=database, id=ids, retmax=10000)
+    handle = Entrez.esummary(db=database, id=ids, retmax=RETMAX)
     if handle:
         record = Entrez.read(handle)
         handle.close()
@@ -135,3 +138,37 @@ def get_data(database: str, search_term: str) -> pd.DataFrame:
     parsed_summaries = _parse_summary(document_summaries)
     df_summaries = pd.DataFrame.from_dict(parsed_summaries)
     return df_summaries
+
+
+def fetch_data(database: str, ids: List[int]) -> StringIO:
+    """Download the sequence data for the input UIDs from the specified Entrez database.
+
+    Parameters
+    ----------
+    database : str
+        Name of the Entrez database from which the sequence data will be fetched.
+    ids : List[int]
+        List of UIDs.
+
+    Returns
+    -------
+    StringIO
+        A StringIO object containing the fetched sequence data in FASTA format.
+
+    Notes
+    -----
+    This function uses the Entrez.efetch method from the Biopython library to retrieve sequence data from the specified Entrez database based on the provided list of UIDs. The data is fetched in FASTA format. The function returns a StringIO object that contains the fetched sequence data.
+    """
+    handle = Entrez.efetch(
+        db=database, id=ids, retmax=RETMAX, rettype=RETTYPE, retmode=RETMODE
+    )
+    if handle:
+        sequences_iterator = SeqIO.parse(handle, RETTYPE)
+        sequences_str_buffer = StringIO()
+        # Write the data to the StringIO object in FASTA format
+        SeqIO.write(sequences_iterator, sequences_str_buffer, RETTYPE)
+        # Reset the file position indicator to the beginning
+        sequences_str_buffer.seek(0)
+        handle.close()
+
+    return sequences_str_buffer
