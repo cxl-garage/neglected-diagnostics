@@ -40,9 +40,13 @@ with query_col:
         )
         submitted = st.form_submit_button("Submit")
         if submitted:
-            st.session_state[NCBI_SUMMARY_FORM] = True
-            st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
-            data_processing.format_ncbi_summary()
+            # search term is empty
+            if search_term == "":
+                st.error("Please input a search term before you submit")
+            else:
+                st.session_state[NCBI_SUMMARY_FORM] = True
+                st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
+                data_processing.format_ncbi_summary()
 
     df_aggrid = pd.DataFrame()
     if st.session_state[NCBI_SUMMARY_FORM]:
