@@ -38,14 +38,20 @@ def format_ncbi_summary() -> None:
     st.session_state[NCBI_DF] = st.session_state[NCBI_DF].reindex(columns=column_order)
 
 
-def get_top_organisms_counts() -> str:
+def get_top_organisms_counts(top_n=15) -> str:
     """Get the top N organisms and their counts in the session's NCBI DataFrame.
 
-    Returns:
-        str: A formatted string containing the top N organisms and their counts, separated by two newlines ("\n\n").
+    Parameters
+    ----------
+    top_n : int, optional
+        Number of top organisms to show, by default 15
+
+    Returns
+    -------
+    str
+        A formatted string containing the top N organisms and their counts, separated by two newlines ("\n\n").
     """
     # Calculate counts of species and sort by counts in descending order
-    top_n = 15
     species_counts = (
         st.session_state[NCBI_DF]["Species"]
         .value_counts()

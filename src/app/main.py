@@ -17,6 +17,7 @@ from app.common.constants import (
     NCBI_DF,
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,
+    TOP_N_ORGANISMS,
 )
 from app.frontend.aggrid_table import aggrid_table
 from app.frontend.download_data import download_data
@@ -63,4 +64,4 @@ with summary_col:
     # Show the summary only if user has submitted the query form
     if st.session_state[NCBI_SUMMARY_FORM]:
         st.header("Top Organisms")
-        st.write(data_processing.get_top_organisms_counts())
+        st.write(data_processing.get_top_organisms_counts(TOP_N_ORGANISMS))
