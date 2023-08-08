@@ -22,6 +22,7 @@ from app.common.constants import (
 from app.frontend.aggrid_table import aggrid_table
 from app.frontend.download_data import download_data
 from app.frontend.filter_dataframe import filter_dataframe
+from app.frontend.filters_info import show_filters_info
 from genetic_testing.routers import ncbi
 
 # Initialize the Streamlit session state keys
@@ -55,10 +56,16 @@ with query_col:
         df_aggrid = aggrid_table["data"]
 
     # Streamlit UI to filter the dataset
-    df_filtered = filter_dataframe(df_aggrid)
+    df_filtered, applied_filters = filter_dataframe(df_aggrid)
     if st.session_state[NCBI_DF_FILTER]:
         st.dataframe(df_filtered)
         st.write(f"Size of final data: {len(df_filtered)}")
+
+        if st.button("Prepare Download"):
+            download_data(database, df_filtered["Id"].unique(), search_term)
+
+    # Streamlit UI to show the applied filters
+    show_filters_info(applied_filters)
 
 with summary_col:
     # Show the summary only if user has submitted the query form
