@@ -16,10 +16,10 @@ def show_filters_info(applied_filters: dict) -> None:
     -------
     None
     """
-    # No filters applied
-    if not applied_filters:
-        filters_info = EMPTY_FILTERS
-    else:
+    filters_info = EMPTY_FILTERS
+    
+    # Filters applied
+    if applied_filters:
         applied_filters_str = "\n\n".join(
             [f"{key}: {value}" for key, value in applied_filters.items()]
         )
