@@ -60,10 +60,10 @@ def filter_dataframe(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
 
     Returns
     -------
-    tuple[pd.DataFrame, dict]
-        A tuple containing two elements:
-        - The filtered DataFrame based on the user-selected criteria.
-        - A dictionary containing the applied filters.
+    pd.DataFrame
+        The filtered DataFrame based on the user-selected criteria.
+    dict
+        A dictionary containing the applied filters.
 
     Notes
     -----
