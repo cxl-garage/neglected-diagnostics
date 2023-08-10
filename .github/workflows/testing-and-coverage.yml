@@ -35,3 +35,6 @@ jobs:
         python -m pytest tests --cov=genetic_testing --cov-report=xml
     - name: Upload coverage report to codecov
       uses: codecov/codecov-action@v3
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        
