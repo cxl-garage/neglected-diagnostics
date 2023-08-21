@@ -1,4 +1,5 @@
-from typing import List
+from io import BytesIO
+from typing import Dict, List
 
 import streamlit as st
 
@@ -66,3 +67,39 @@ def get_top_organisms_counts(top_n=15) -> str:
     ]
 
     return "\n\n".join(species_counts_list)
+
+
+def read_fasta(file: BytesIO) -> Dict[str, str]:
+    """
+    Read a FASTA file and return a dictionary of sequences and headers.
+
+    Parameters
+    ----------
+    file : BytesIO
+        A BytesIO object containing the FASTA file data.
+
+    Returns
+    -------
+    Dict[str, str]
+        A dictionary containing the sequences and headers from the FASTA file.
+    """
+    sequences = {}  # Dictionary to store sequences and headers
+    current_header = None
+    current_sequence = []
+
+    with file as f:
+        for line in f:
+            line = line.strip()  # Remove leading/trailing whitespace
+
+            if line.startswith(b">"):  # Header line (as bytes)
+                if current_header is not None:  # Store previous sequence
+                    sequences[current_header] = "".join(current_sequence)
+                current_header = line[1:].decode("utf-8")  # Decode bytes to string
+                current_sequence = []  # Reset sequence list
+            else:
+                current_sequence.append(line.decode("utf-8"))  # Decode bytes to str
+
+        if current_header is not None:  # Store the last sequence
+            sequences[current_header] = "".join(current_sequence)
+
+    return sequences
