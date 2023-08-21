@@ -18,7 +18,9 @@ dependencies = [
     "deprecated",
     "ipykernel", # Support for Jupyter notebooks
     "biopython",
-    "streamlit"
+    "streamlit",
+    "python-Levenshtein", 
+    "pydantic"
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
