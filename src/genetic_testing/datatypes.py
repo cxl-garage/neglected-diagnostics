@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 
+
 class GroupSequenceColumns(BaseModel):
     id: str = "SequenceID"
     seq: str = "Sequence"

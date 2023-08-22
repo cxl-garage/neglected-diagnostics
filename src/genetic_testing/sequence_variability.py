@@ -1,8 +1,8 @@
+from typing import Dict, Union
+
 import pandas as pd
 from Levenshtein import distance as levenshtein_distance
 
-
-from typing import Dict, Union
 from .datatypes import GroupSequenceColumns
 
 
@@ -60,7 +60,7 @@ def _group_sequences(
     """
     try:
         processed_sequences = _preprocess(sequences, base_sequence)
-        
+
         cols = GroupSequenceColumns()
         df_sequence = pd.DataFrame(
             processed_sequences.items(), columns=[cols.id, cols.seq]
