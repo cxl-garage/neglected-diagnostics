@@ -1,4 +1,5 @@
-from typing import Dict, Union
+from collections import defaultdict
+from typing import DefaultDict, Dict, List, Union
 
 import pandas as pd
 from Levenshtein import distance as levenshtein_distance
@@ -83,12 +84,29 @@ def _group_sequences(
         return None
 
 
-def _calculate_distances(curr_pattern, patterns_dict):
-    dist = {}
+def _calculate_distances(
+    curr_pattern: str, patterns_dict: Dict[str, int]
+) -> DefaultDict[int, List[int]]:
+    """
+    Calculate the Levenshtein distance between the current sequence pattern and all other patterns in the more frequent groups of sequence data.
+
+    Parameters
+    ----------
+    curr_pattern : str
+        The current pattern to compare with other patterns in the input sequence data.
+    patterns_dict : Dict[str, int]
+        A dictionary containing all the patterns belonging to more frequent groups and their corresponding group numbers.
+
+    Returns
+    -------
+    DefaultDict[int, List[int]]
+        A defaultdict containing the Levenshtein distances as keys and the corresponding group numbers of patterns with that distance as values.
+    """
+    # Initialize a defaultdict to store distances and their corresponding group numbers
+    dist = defaultdict(list)
     for key, value in patterns_dict.items():
         curr_distance = levenshtein_distance(curr_pattern, key)
-        if curr_distance not in dist:
-            dist[curr_distance] = [value]
+        dist[curr_distance].append(value)
     return dist
 
 
