@@ -3,7 +3,9 @@ from io import BytesIO
 import streamlit as st
 
 from app.common.data_processing import read_fasta
-from genetic_testing.sequence_variability import calculate_sequence_variability
+from genetic_testing.sequence_analysis.sequence_variability import (
+    calculate_sequence_variability,
+)
 
 # Streamlit app header
 st.header("Calculate Sequence Variability")
