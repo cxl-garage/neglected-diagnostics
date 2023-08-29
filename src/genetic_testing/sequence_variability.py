@@ -53,10 +53,11 @@ def _group_sequences(
     -------
     Union[pd.DataFrame, None]
         If there are sequences to group, returns a pandas DataFrame with the count of each group, sorted by count in descending order.
-        The DataFrame has three columns:
-        - Sequence: the sequence that belongs to the group.
-        - Count: the number of sequences that belong to the group.
-        - Group_Number: the number of the group, starting from 1 for the most common group.
+        The DataFrame has four columns:
+        1. SequenceID: the ID of the sequence.
+        2. Sequence: the sequence that belongs to the group.
+        3. Count: the number of sequences that belong to the group.
+        4. Group_Number: the number of the group, starting from 1 for the most common group.
         If there are no sequences to group, returns None.
     """
     try:
@@ -128,32 +129,51 @@ def _recreate_sequences(df_sequence_patterns, base_sequence):
     return df_final_sequences
 
 
-def _merge_sequence_data(df, base_sequence, min_count):
-    # Get all the sequences less than minimum count
-    df_min_count = df[df["Count"] < min_count]
+def _merge_sequence_data(df: pd.DataFrame, base_sequence: str, min_count: int):
+    """
+    Merge sequences having less than `min_count` with similar sequences having a count of atleast `min_count`.
 
-    # Get all the sequences greater than equal to minimum count
-    df_max_count = df[df["Count"] >= min_count]
+    Parameters
+    ----------
+    df : pandas.DataFrame
+        DataFrame containing sequence data with columns "SequenceID", "Sequence", "Count", and "Group_Number".
+    base_sequence : str
+        The base sequence used to recreate the final sequences in the DataFrame.
+    min_count : int
+        The threshold count of a sequence to be considered for grouping.
 
-    # Get all max count pattern
+    Returns
+    -------
+    pandas.DataFrame
+        DataFrame containing the merged sequences with updated counts.
+    """
+    cols = GroupSequenceColumns()
+
+    # Filter sequences with counts less than minimum count
+    df_min_count = df[df[cols.count] < min_count]
+
+    # Filter sequences with counts greater than or equal to minimum count
+    df_max_count = df[df[cols.count] >= min_count]
+
+    # Create a dictionary of patterns and their corresponding group numbers
     patterns_dict = {
-        row["Sequence"]: row["Group_Number"] for index, row in df_max_count.iterrows()
+        row[cols.seq]: row[cols.group_number] for _, row in df_max_count.iterrows()
     }
 
-    # Find the closest group for each of the sequences in the minimum count dataframe
+    # Iterate over sequences with counts less than minimum count
     for _, row in df_min_count.iterrows():
-        print("Current Sequence: ", row["Sequence"])
-        distances_groups = _calculate_distances(row["Sequence"], patterns_dict)
+        # Calculate the distances between the current sequence and all other sequences in the more frequent groups
+        distances_groups = _calculate_distances(row[cols.seq], patterns_dict)
         sorted_distances_groups = sorted(distances_groups.items())
-        group_number = sorted_distances_groups[0][1][0]  # TODO: Improve this line
-        print("Current Group Number: ", group_number)
 
-        df_max_count.loc[df_max_count["Group_Number"] == group_number, "Count"] += row[
-            "Count"
-        ]
+        # Get the group number of the closest sequence
+        _, group_numbers = sorted_distances_groups[0]
+        closest_group_number = group_numbers[0]
 
-        print(df_max_count[df_max_count["Group_Number"] == group_number])
-        print("\n\n")
+        # Add the count of the current sequence to the group with the closest sequence
+        df_max_count.loc[
+            df_max_count[cols.group_number] == closest_group_number, cols.count
+        ] += row[cols.count]
 
     # Recreate the sequences
     df_final_sequences = _recreate_sequences(df_max_count, base_sequence)
