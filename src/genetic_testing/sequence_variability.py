@@ -111,25 +111,53 @@ def _calculate_distances(
     return dist
 
 
-def _recreate_sequences(df_sequence_patterns, base_sequence):
+def _recreate_sequences(
+    df_sequence_patterns: pd.DataFrame, base_sequence: str
+) -> pd.DataFrame:
+    """Recreate the sequences by replacing gaps with characters from the base sequence.
+
+    This function takes a DataFrame containing sequence patterns and replaces gaps ('-') in each pattern with characters from the corresponding positions of the base sequence.
+
+    Parameters
+    ----------
+    df_sequence_patterns : pd.DataFrame
+        DataFrame containing sequence patterns with columns "SequenceID", "Sequence", and "Group Number".
+    base_sequence : str
+        The base sequence used to fill gaps in the patterns.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame with recreated sequences.
+    """
+    cols = GroupSequenceColumns()
+    # Create a copy of the input DataFrame to avoid modifying the original data
     df_final_sequences = df_sequence_patterns.copy()
+
+    # Iterate through each row in the DataFrame
     for index, row in df_final_sequences.iterrows():
-        new_pattern = ""
-        curr_pattern = row["Sequence"]
+        new_pattern = ""  # Initialize an empty string to store the new sequence
+        curr_pattern = row[cols.seq]  # Current sequence pattern from the DataFrame
+
+        # Iterate through each character in the current pattern
         for i in range(len(curr_pattern)):
             character = curr_pattern[i]
             if character != "-":
+                # If character is not a gap, append it in uppercase to the new pattern
                 new_pattern += character.upper()
             else:
+                # If character is a gap, replace it with the corresponding character from the base sequence
                 new_pattern += base_sequence[i]
 
-        print(new_pattern)
-        df_final_sequences.at[index, "Sequence"] = new_pattern
+        # Update the "Sequence" column in the DataFrame with the new pattern
+        df_final_sequences.at[index, cols.seq] = new_pattern
 
     return df_final_sequences
 
 
-def _merge_sequence_data(df: pd.DataFrame, base_sequence: str, min_count: int):
+def _merge_sequence_data(
+    df: pd.DataFrame, base_sequence: str, min_count: int
+) -> pd.DataFrame:
     """
     Merge sequences having less than `min_count` with similar sequences having a count of atleast `min_count`.
 
@@ -181,11 +209,34 @@ def _merge_sequence_data(df: pd.DataFrame, base_sequence: str, min_count: int):
     return df_final_sequences
 
 
-def calculate_sequence_variability(sequences, base_sequence, min_count=2):
+def calculate_sequence_variability(
+    sequences: Dict[str, str], base_sequence: str, min_count: int = 2
+) -> Union[pd.DataFrame, None]:
+    """Calculate sequence variability based on similarity to a base sequence and sequence counts.
+
+    Parameters
+    ----------
+    sequences : Dict[str, str]
+        A dictionary containing sequence IDs as keys and their corresponding sequences as values.
+    base_sequence : str
+        The base sequence to compare the given sequences with.
+    min_count : int, optional
+        The minimum count of sequences in a group for it to be not considered for further merging with more frequent groups, by default 2
+
+    Returns
+    -------
+    Union[pd.DataFrame, None]
+        If `sequences` and `base_sequence` are provided, returns a pandas DataFrame with grouped sequences and their counts.
+        If either sequences or base_sequence is empty, returns None.
+    """
+    # Check if sequences or base_sequence is empty
     if not sequences or not base_sequence:
         return None
 
+    # Group sequences by similarity and count
     df_sequence_counts = _group_sequences(sequences, base_sequence)
+
+    # Merge sequences based on count and similarity
     df_final_sequences = _merge_sequence_data(
         df_sequence_counts, base_sequence, min_count
     )
