@@ -98,14 +98,9 @@ def filter_dataframe(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
                 filters[column] = user_cat_input
             elif is_numeric_dtype(df[column]):
                 with right:
-                    # Create a sub column layout
-                    sub_columns = st.columns(2)
-                    # Add input boxes for minimum and maximum values in the row
-                    with sub_columns[0]:
-                        min_length = st.number_input("Enter Minimum Length")
-
-                    with sub_columns[1]:
-                        max_length = st.number_input("Enter Maximum Length")
+                    # Add input boxes for minimum and maximum values
+                    min_length = st.number_input("Enter Minimum Length")
+                    max_length = st.number_input("Enter Maximum Length")
                 df = df[df[column].between(min_length, max_length)]
                 filters[column] = (min_length, max_length)
             elif is_datetime64_any_dtype(df[column]):
