@@ -1,5 +1,5 @@
 from collections import defaultdict
-from typing import DefaultDict, Dict, List, Union
+from typing import DefaultDict, Dict, List, Optional
 
 import pandas as pd
 from Levenshtein import distance as levenshtein_distance
@@ -38,7 +38,7 @@ def _preprocess(sequences: Dict[str, str], base_sequence: str) -> Dict[str, str]
 
 def _group_sequences(
     sequences: Dict[str, str], base_sequence: str
-) -> Union[pd.DataFrame, None]:
+) -> Optional[pd.DataFrame]:
     """
     Groups sequences by their similarity to a base sequence and returns a pandas DataFrame with the count of each group.
 
@@ -51,7 +51,7 @@ def _group_sequences(
 
     Returns
     -------
-    Union[pd.DataFrame, None]
+    Optional[pd.DataFrame]
         If there are sequences to group, returns a pandas DataFrame with the count of each group, sorted by count in descending order.
         The DataFrame has four columns:
         1. SequenceID: the ID of the sequence.
@@ -211,7 +211,7 @@ def _merge_sequence_data(
 
 def calculate_sequence_variability(
     sequences: Dict[str, str], base_sequence: str, min_count: int = 2
-) -> Union[pd.DataFrame, None]:
+) -> Optional[pd.DataFrame]:
     """Calculate sequence variability based on similarity to a base sequence and sequence counts.
 
     Parameters
@@ -225,7 +225,7 @@ def calculate_sequence_variability(
 
     Returns
     -------
-    Union[pd.DataFrame, None]
+    Optional[pd.DataFrame]
         If `sequences` and `base_sequence` are provided, returns a pandas DataFrame with grouped sequences and their counts.
         If either sequences or base_sequence is empty, returns None.
     """
