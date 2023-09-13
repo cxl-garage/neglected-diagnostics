@@ -10,4 +10,3 @@ Welcome to genetic_testing's documentation!
 
    Home page <self>
    API Reference <autoapi/index>
-   Notebooks <notebooks>

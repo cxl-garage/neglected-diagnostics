@@ -15,10 +15,10 @@ classifiers = [
 ]
 dynamic = ["version"]
 dependencies = [
-    "deprecated",
-    "ipykernel", # Support for Jupyter notebooks
-    "biopython",
-    "streamlit"
+    "biopython>=1.81",
+    "streamlit>=1.26.0",
+    "python-Levenshtein>=0.21.1", 
+    "pydantic>=2.3.0"
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
