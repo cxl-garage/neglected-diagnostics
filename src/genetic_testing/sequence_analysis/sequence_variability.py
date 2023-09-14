@@ -121,7 +121,7 @@ def _recreate_sequences(
     Parameters
     ----------
     df_sequence_patterns : pd.DataFrame
-        DataFrame containing sequence patterns with columns "SequenceID", "Sequence", and "Group Number".
+        DataFrame containing sequence patterns with columns "Sequence", "Count", and "Group Number".
     base_sequence : str
         The base sequence used to fill gaps in the patterns.
 
@@ -183,6 +183,10 @@ def _merge_sequence_data(
     # Filter sequences with counts greater than or equal to minimum count
     df_max_count = df[df[cols.count] >= min_count]
 
+    if df_max_count.empty:
+        # If there are no sequences with count greater than or equal to minimum count, return empty DataFrame
+        return df_max_count
+
     # Create a dictionary of patterns and their corresponding group numbers
     patterns_dict = {
         row[cols.seq]: row[cols.group_number] for _, row in df_max_count.iterrows()
@@ -205,6 +209,7 @@ def _merge_sequence_data(
 
     # Recreate the sequences
     df_final_sequences = _recreate_sequences(df_max_count, base_sequence)
+    df_final_sequences.reset_index(drop=True, inplace=True)
 
     return df_final_sequences
 
@@ -240,5 +245,9 @@ def calculate_sequence_variability(
     df_final_sequences = _merge_sequence_data(
         df_sequence_counts, base_sequence, min_count
     )
+
+    # Return None if there are no sequences to group
+    if df_final_sequences.empty:
+        return None
 
     return df_final_sequences
