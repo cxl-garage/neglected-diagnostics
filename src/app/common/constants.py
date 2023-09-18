@@ -1,7 +1,12 @@
-# Streamlit Session State Keys
+# Session State Keys for Gather Data page
 NCBI_SUMMARY_FORM = "NCBI_SUMMARY_FORM"
 NCBI_DF = "NCBI_DF"
 NCBI_DF_FILTER = "NCBI_DF_FILTER"
+
+# Session State Keys for Sequence Variability page
+SEQVAR_CALC_BTN = "SEQVAR_CALC_BTN"
+SEQVAR_CALCULATED = "SEQVAR_CALCULATED"
+SEQVAR_DF = "SEQVAR_DF"
 
 # Streamlit UI
 PAGE_LAYOUT = "wide"
