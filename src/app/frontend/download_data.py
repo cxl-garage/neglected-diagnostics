@@ -67,7 +67,9 @@ def download_seq_var_data(df: pd.DataFrame, species: str) -> None:
     # Convert the DataFrame to FASTA format string
     fasta_str = seqvar_df_to_fasta(df, species)
 
-    st.write("FASTA file is ready for download. Please click the button below to proceed.")
+    st.write(
+        "FASTA file is ready for download. Please click the button below to proceed."
+    )
 
     # Display a download button
     st.download_button(
