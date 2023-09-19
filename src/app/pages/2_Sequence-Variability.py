@@ -54,7 +54,7 @@ if st.session_state[SEQVAR_CALC_BTN]:
             # Enter the species name for downloading the data
             species = st.text_input("Enter the species name:")
 
-            if st.button("Prepare for Download"):
+            if st.button("Prepare for download"):
                 download_seq_var_data(st.session_state[SEQVAR_DF], species)
         else:
-            st.write("No Sequence Variability Data to Download")
+            st.write("No Sequence Variability data to download")
