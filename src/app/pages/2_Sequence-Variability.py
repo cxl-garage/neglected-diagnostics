@@ -27,10 +27,10 @@ if uploaded_file is not None:
         st.write(sequences)
 
     # Display a form with an input box
-    base_sequence = st.text_input("Enter Base Sequence")
+    base_sequence = st.text_input("Enter base sequence")
 
     # Display a button to calculate sequence variability
-    if st.button("Calculate Sequence Variability"):
+    if st.button("Calculate sequence variability"):
         st.session_state[SEQVAR_CALC_BTN] = True
 
 # Button to calculate sequence variability is clicked
@@ -57,4 +57,4 @@ if st.session_state[SEQVAR_CALC_BTN]:
             if st.button("Prepare for download"):
                 download_seq_var_data(st.session_state[SEQVAR_DF], species)
         else:
-            st.write("No Sequence Variability data to download")
+            st.write("No sequence variability data to download")
