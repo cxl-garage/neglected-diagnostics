@@ -1,9 +1,11 @@
 from io import BytesIO
-from typing import Dict, List
+from typing import Dict
 
+import pandas as pd
 import streamlit as st
 
 from app.common.constants import NCBI_DF
+from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns
 
 
 def format_ncbi_summary() -> None:
@@ -103,3 +105,31 @@ def read_fasta(file: BytesIO) -> Dict[str, str]:
             sequences[current_header] = "".join(current_sequence)
 
     return sequences
+
+
+def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
+    """Convert a sequence variability DataFrame to FASTA format string.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A DataFrame containing sequence variability data. It is expected to have `Sequence`, `Group_Number`, and `Count` columns.
+
+    species : str, optional
+        The name of the species, by default `species`.
+
+    Returns
+    -------
+    str
+        A string containing the sequence variability data in FASTA format.
+    """
+    cols = GroupSequenceColumns()
+    fasta_str = []
+    for _, row in df.iterrows():
+        group_number = int(row[cols.group_number])
+        count = int(row[cols.count])
+        sequence = row[cols.seq]
+
+        fasta_str.append(f">Group{group_number}_{species}_{count}\n{sequence}")
+
+    return "\n".join(fasta_str)
