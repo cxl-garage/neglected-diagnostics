@@ -3,10 +3,16 @@ NCBI_SUMMARY_FORM = "NCBI_SUMMARY_FORM"
 NCBI_DF = "NCBI_DF"
 NCBI_DF_FILTER = "NCBI_DF_FILTER"
 
-# Session State Keys for Sequence Variability page
+# Session State Keys for calculating sequence variability
 SEQVAR_CALC_BTN = "SEQVAR_CALC_BTN"
 SEQVAR_CALCULATED = "SEQVAR_CALCULATED"
 SEQVAR_DF = "SEQVAR_DF"
+
+# Session State Keys for calculating sequence variability table
+SEQVAR_TABLE_BTN = "SEQVAR_TABLE_BTN"
+SEQVAR_TABLE_CALC = "SEQVAR_TABLE_CALC"
+SEQVAR_TABLE = "SEQVAR_TABLE"
+
 
 # Streamlit UI
 PAGE_LAYOUT = "wide"

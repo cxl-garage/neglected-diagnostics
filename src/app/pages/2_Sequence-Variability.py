@@ -4,14 +4,14 @@ import streamlit as st
 
 from app.common.constants import SEQVAR_CALC_BTN, SEQVAR_CALCULATED, SEQVAR_DF
 from app.common.data_processing import read_fasta
-from app.common.setup import initialize_session_state_seq_var
+from app.common.setup import init_session_state_seq_var
 from app.frontend.download_data import download_seq_var_data
 from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_sequence_variability,
 )
 
 # Initialize the Streamlit session state for this page
-initialize_session_state_seq_var()
+init_session_state_seq_var()
 
 # Streamlit app header
 st.header("Calculate Sequence Variability")
