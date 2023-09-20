@@ -3,6 +3,7 @@ from io import BytesIO
 import streamlit as st
 
 from app.common.constants import SEQVAR_CALC_BTN, SEQVAR_CALCULATED, SEQVAR_DF
+from app.common.constants import SEQVAR_CALC_BTN, SEQVAR_CALCULATED, SEQVAR_DF
 from app.common.data_processing import read_fasta
 from app.common.setup import init_session_state_seq_var
 from app.frontend.download_data import download_seq_var_data
@@ -27,7 +28,7 @@ if uploaded_file is not None:
         st.write(sequences)
 
     # Display a form with an input box
-    base_sequence = st.text_input("Enter Base Sequence")
+    base_sequence = st.text_input("Enter base sequence")
 
     # Display a button to calculate sequence variability
     if st.button("Calculate Sequence Variability"):
