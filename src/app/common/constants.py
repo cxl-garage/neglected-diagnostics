@@ -1,5 +1,4 @@
 # Session State Keys for Gather Data page
-# Session State Keys for Gather Data page
 NCBI_SUMMARY_FORM = "NCBI_SUMMARY_FORM"
 NCBI_DF = "NCBI_DF"
 NCBI_DF_FILTER = "NCBI_DF_FILTER"
@@ -13,7 +12,6 @@ SEQVAR_DF = "SEQVAR_DF"
 SEQVAR_TABLE_BTN = "SEQVAR_TABLE_BTN"
 SEQVAR_TABLE_CALC = "SEQVAR_TABLE_CALC"
 SEQVAR_TABLE = "SEQVAR_TABLE"
-
 
 # Streamlit UI
 PAGE_LAYOUT = "wide"

@@ -5,8 +5,6 @@ import streamlit as st
 from app.common.constants import SEQVAR_TABLE, SEQVAR_TABLE_BTN, SEQVAR_TABLE_CALC
 from app.common.data_processing import read_fasta
 from app.common.setup import init_session_state_seq_var_table
-
-# from app.frontend.download_data import download_seq_var_data
 from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_seq_variability_table,
 )
@@ -31,7 +29,7 @@ if uploaded_file is not None:
 seqvar_threshold = st.text_input("Enter the maximum sequence variability threshold")
 
 # Display a button to display the sequence variability table
-if st.button("Display Sequence Variability Table"):
+if st.button("Display sequence variability table"):
     st.session_state[SEQVAR_TABLE_BTN] = True
 
 
@@ -56,10 +54,11 @@ if st.session_state[SEQVAR_TABLE_CALC]:
     df = df[df <= float(seqvar_threshold)].dropna()
     st.dataframe(df)
 
-    # Download the sequence variability table as a CSV file
+    # Download the transpose of sequence variability table as a CSV file
     st.download_button(
-        label="Download Sequence Variability Table as CSV",
-        data=df.to_csv().encode("utf-8"),
+        label="Download sequence variability table as CSV",
+        data=df.transpose().to_csv().encode("utf-8"),
         file_name="sequence_variability_table.csv",
         mime="text/csv",
+        help="Download the transpose of sequence variability table as a CSV file",
     )

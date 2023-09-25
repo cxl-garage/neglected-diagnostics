@@ -253,7 +253,7 @@ def calculate_sequence_variability(
     return df_final_sequences
 
 
-def _calculate_seq_variability(sequences: List[str]) -> None:
+def _calculate_seq_variability_table(sequences: List[str]) -> None:
     position_counts = {}
 
     for seq in sequences:
@@ -265,19 +265,11 @@ def _calculate_seq_variability(sequences: List[str]) -> None:
                     position_counts[i][base] = 0
                 position_counts[i][base] += 1
 
-    # for position, counts in position_counts.items():
-    #     total_count = sum(counts.values())
-    #     print(f'Position {position + 1} - ', end='')
-    #     for base, count in counts.items():
-    #         percentage = (count / total_count) * 100
-    #         print(f'{base} is {percentage:.2f}%, ', end='')
-    #     print()
-
     df_data = []
 
     for position, counts in position_counts.items():
         total_count = sum(counts.values())
-        row = {"index": f"Position {position + 1}"}
+        row = {"index": position + 1}
 
         for base, count in counts.items():
             percentage = (count / total_count) * 100
@@ -296,5 +288,5 @@ def _calculate_seq_variability(sequences: List[str]) -> None:
 
 
 def calculate_seq_variability_table(sequences: List[str]) -> None:
-    df = _calculate_seq_variability(sequences)
+    df = _calculate_seq_variability_table(sequences)
     return df

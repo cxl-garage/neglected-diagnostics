@@ -3,7 +3,6 @@ from io import BytesIO
 import streamlit as st
 
 from app.common.constants import SEQVAR_CALC_BTN, SEQVAR_CALCULATED, SEQVAR_DF
-from app.common.constants import SEQVAR_CALC_BTN, SEQVAR_CALCULATED, SEQVAR_DF
 from app.common.data_processing import read_fasta
 from app.common.setup import init_session_state_seq_var
 from app.frontend.download_data import download_seq_var_data
@@ -31,7 +30,7 @@ if uploaded_file is not None:
     base_sequence = st.text_input("Enter base sequence")
 
     # Display a button to calculate sequence variability
-    if st.button("Calculate Sequence Variability"):
+    if st.button("Calculate sequence variability"):
         st.session_state[SEQVAR_CALC_BTN] = True
 
 # Button to calculate sequence variability is clicked
@@ -58,4 +57,4 @@ if st.session_state[SEQVAR_CALC_BTN]:
             if st.button("Prepare for download"):
                 download_seq_var_data(st.session_state[SEQVAR_DF], species)
         else:
-            st.write("No Sequence Variability data to download")
+            st.write("No sequence variability data to download")
