@@ -251,3 +251,48 @@ def calculate_sequence_variability(
         return None
 
     return df_final_sequences
+
+
+def calculate_seq_variability_table(sequences: List[str]) -> pd.DataFrame:
+    """Calculates the sequence variability table for a list of sequences.
+
+    Parameters
+    ----------
+    sequences : List[str]
+        List of sequences.
+
+    Returns
+    -------
+    pd.DataFrame
+        DataFrame containing the sequence variability table.
+    """
+    # Dictionary to store counts of each base at each position
+    position_counts = {}
+
+    # Count occurrences of each base at each position
+    for seq in sequences:
+        for i, base in enumerate(seq):
+            position_counts[i] = position_counts.get(i, {})
+            if base != "-":
+                position_counts[i][base] = position_counts[i].get(base, 0) + 1
+
+    # Prepare data for DataFrame
+    df_data = []
+
+    for position, counts in position_counts.items():
+        total_count = sum(counts.values())
+        row = {"Position": position + 1}
+
+        for base, count in counts.items():
+            percentage = (count / total_count) * 100
+            row[base] = round(percentage, 2)
+
+        df_data.append(row)
+
+    # Create DataFrame and set "Position" column as index
+    df = pd.DataFrame(df_data)
+    df.set_index("Position", inplace=True)
+
+    df.fillna(0.00, inplace=True)
+
+    return df

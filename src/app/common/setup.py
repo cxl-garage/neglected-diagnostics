@@ -9,6 +9,9 @@ from app.common.constants import (
     SEQVAR_CALC_BTN,
     SEQVAR_CALCULATED,
     SEQVAR_DF,
+    SEQVAR_TABLE,
+    SEQVAR_TABLE_BTN,
+    SEQVAR_TABLE_CALC,
 )
 
 
@@ -30,12 +33,20 @@ def _initialize_session_state() -> None:
         st.session_state[NCBI_DF] = pd.DataFrame()
 
 
-def initialize_session_state_seq_var() -> None:
+def init_session_state_seq_var() -> None:
     """Initialize the Streamlit session state for the Sequence Variability page."""
     if SEQVAR_CALC_BTN not in st.session_state:
         st.session_state[SEQVAR_CALC_BTN] = False
         st.session_state[SEQVAR_CALCULATED] = False
         st.session_state[SEQVAR_DF] = pd.DataFrame()
+
+
+def init_session_state_seq_var_table() -> None:
+    """Initialize the Streamlit session state for the Sequence Variability Table."""
+    if SEQVAR_TABLE_BTN not in st.session_state:
+        st.session_state[SEQVAR_TABLE_BTN] = False
+        st.session_state[SEQVAR_TABLE_CALC] = False
+        st.session_state[SEQVAR_TABLE] = pd.DataFrame()
 
 
 def initialize() -> None:
