@@ -5,9 +5,11 @@ Thank you for investing your time in contributing to our project!
 Read our [Code of Conduct](https://github.com/uw-ssec/code-of-conduct/blob/main/CODE_OF_CONDUCT.md) to keep our community approachable and respectable.
 
 ## Developing Neglected Diagnostics
+
 Neglected Diagnostics is in its initial phase of development. Follow the below steps for setting up the development environment and contributing to the project.
 
 ### Environment Setup
+
 Fork the repository, and create your local version, then follow the installation steps:
 
 1. Create conda environment
@@ -29,6 +31,7 @@ pip install -e ".[dev,docs]"
 ```
 
 ### Post setup
+
 You should prepare pre-commit, which will help you run the linting and formatting checks configured in the project before every commit.
 
 ```bash
@@ -36,6 +39,15 @@ pre-commit install # Will install a pre-commit hook into the git repo
 ```
 
 NOTE: You can also/alternatively run `pre-commit run` (changes only) or `pre-commit run --all-files` to check even without installing the hook.
+
+## Run Neglected Diagnostics
+
+You are now ready to run the Neglected Diagnostics Streamlit application:
+
+```bash
+streamlit run src/app/main.py
+```
+
 
 ## Testing
 
