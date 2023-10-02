@@ -26,15 +26,6 @@ with target_container:
         help="Only single FASTA files are allowed",
     )
 
-    for file in target_files:
-        st.write(file.name)
-        # To convert to a string based IO:
-        stringio = StringIO(file.getvalue().decode("utf-8"))
-        for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            print(seq_record.id)
-            print(str(seq_record.seq))
-            print(len(seq_record))
-
     # # Create a checkbox to enable multiselect
     # tgt_split_flag = st.checkbox(
     #     "Split Target Files",

@@ -1,6 +1,7 @@
 import argparse
 import glob
 import os
+import pickle
 import re
 from copy import deepcopy
 from io import StringIO
@@ -29,6 +30,8 @@ class exact_match_primer:
 
 
 def import_files(target_files, off_target_files):
+    target_files_sorted = sorted(target_files, key=lambda x: x.name)
+    off_target_files_sorted = sorted(off_target_files, key=lambda x: x.name)
     # targ_fasta_paths = glob.glob(os.path.join(target_path, "*.fasta"))
     # off_fasta_paths = glob.glob(os.path.join(off_path, "*.fasta"))fasta_file
 
@@ -36,37 +39,41 @@ def import_files(target_files, off_target_files):
     # and labels (0 = target, !0 = off target)
     aln = []
     labs = []
-    for fasta_file in target_files:
+    for fasta_file in target_files_sorted:
         print(fasta_file.name)
 
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            print(seq_record.id)
-            print(str(seq_record.seq))
-            print(len(seq_record))
+            # print(seq_record.id)
+            # print(str(seq_record.seq))
+            # print(len(seq_record))
 
             labs.append(0)
             aln.append(str(seq_record.seq))
 
-    for fasta_file in off_target_files:
+    for fasta_file in off_target_files_sorted:
         print(fasta_file.name)
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            print(seq_record.id)
-            print(str(seq_record.seq))
-            print(len(seq_record))
+            # print(seq_record.id)
+            # print(str(seq_record.seq))
+            # print(len(seq_record))
 
             labs.append(1)
             aln.append(str(seq_record.seq))
 
     target = [i for i, val in enumerate(labs) if val == 0]  # target seq has label 0
     off = [i for i, val in enumerate(labs) if val != 0]
-    print(len(aln))
-    print(len(labs))
-    print(len(target))
-    print(len(off))
+    with open("./src/exp/aln.pkl", "wb") as file:
+        pickle.dump(aln, file)
+    with open("./src/exp/labs.pkl", "wb") as file:
+        pickle.dump(labs, file)
+    with open("./src/exp/target.pkl", "wb") as file:
+        pickle.dump(target, file)
+    with open("./src/exp/off.pkl", "wb") as file:
+        pickle.dump(off, file)
     return (aln, labs, target, off)
 
 
