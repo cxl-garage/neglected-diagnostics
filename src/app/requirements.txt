@@ -1,3 +1,4 @@
 biopython
 streamlit-aggrid
+fuzzysearch>=0.7.3
 git+https://github.com/aniketfadia96/neglected-diagnostics.git@assay-target
