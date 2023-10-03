@@ -135,23 +135,3 @@ def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
         fasta_str.append(f">Group{group_number}_{species}_{count}\n{sequence}")
 
     return "\n".join(fasta_str)
-
-
-# def parse_fasta_files(
-#     fasta_files: Union[UploadedFile, List[UploadedFile], None]
-# ) -> Dict[str, str]:
-#     sequences = {}
-
-#     for file in fasta_files:
-#         print(file.name)
-
-#         # To convert to a string based IO:
-#         stringio = StringIO(file.getvalue().decode("utf-8"))
-#         for seq_record in SeqIO.parse(stringio, "fasta"):
-#             # print(seq_record.id)
-#             # print(str(seq_record.seq))
-#             # print(len(seq_record))
-
-#             sequences[seq_record.id] = str(seq_record.seq)
-
-#     return sequences

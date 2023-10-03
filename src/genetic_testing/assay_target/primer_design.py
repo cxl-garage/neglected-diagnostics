@@ -65,14 +65,6 @@ def import_files(target_files, off_target_files, reference_sequence):
 
     target = [i for i, val in enumerate(labs) if val == 0]  # target seq has label 0
     off = [i for i, val in enumerate(labs) if val != 0]
-    with open("./src/exp/aln.pkl", "wb") as file:
-        pickle.dump(aln, file)
-    with open("./src/exp/labs.pkl", "wb") as file:
-        pickle.dump(labs, file)
-    with open("./src/exp/target.pkl", "wb") as file:
-        pickle.dump(target, file)
-    with open("./src/exp/off.pkl", "wb") as file:
-        pickle.dump(off, file)
     return (aln, labs, target, off, index)
 
 
