@@ -18,7 +18,8 @@ dependencies = [
     "biopython>=1.81",
     "streamlit>=1.26.0",
     "python-Levenshtein>=0.21.1", 
-    "pydantic>=2.3.0"
+    "pydantic>=2.3.0",
+    "fuzzysearch>=0.7.3",
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)
