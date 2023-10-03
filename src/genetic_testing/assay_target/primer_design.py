@@ -116,7 +116,7 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, max_dif):
     return (primers_l, target_snps, matches, off_snps)
 
 
-def write_out(primers_l, target_snps, matches, off_snps, filename):
+def write_out(primers_l, target_snps, matches, off_snps):
     df = pd.DataFrame(
         {
             "primers": primers_l,
@@ -167,80 +167,27 @@ def calc_nuc_dif(primer_seq, aln_l, aln, max_dif):
     return primer_scores
 
 
+def find_reference_index(target_files, reference_sequence):
+    return [file.name for file in target_files].index(reference_sequence)
+
+
 def find_target_area(
     target_files,
     off_target_files,
-    index=0,
+    reference_sequence,
     window=300,
     slide=10,
     max_dif=5,
-    out="potential_primers_out.csv",
 ):
-    # parser = argparse.ArgumentParser(description="Choose primer locations")
-    # parser.add_argument(
-    #     "-target",
-    #     action="store",
-    #     help="directory containing target fastas",
-    #     dest="targ",
-    #     type=str,
-    #     default="/Users/kristinaceres/CXL/ASFV/panaroo_blast_target_genes/D250R",
-    # )
-    # parser.add_argument(
-    #     "-off",
-    #     action="store",
-    #     help="directory containing off target fastas",
-    #     dest="off",
-    #     type=str,
-    #     default="/Users/kristinaceres/CXL/ASFV/off_target_genomes",
-    # )
-    # parser.add_argument(
-    #     "-ref_index",
-    #     action="store",
-    #     help="index of reference genome in target directory",
-    #     dest="index",
-    #     type=int,
-    #     default=0,
-    # )
-    # parser.add_argument(
-    #     "-window",
-    #     action="store",
-    #     help="target region size",
-    #     dest="window",
-    #     type=int,
-    #     default=300,
-    # )
-    # parser.add_argument(
-    #     "-slide",
-    #     action="store",
-    #     help="step to slide window to look for next potential target region",
-    #     dest="slide",
-    #     type=int,
-    #     default=10,
-    # )
-    # parser.add_argument(
-    #     "-max_dif",
-    #     action="store",
-    #     help="maximum allowed differences between primers and targets",
-    #     dest="max_dif",
-    #     type=int,
-    #     default=5,
-    # )
-    # parser.add_argument(
-    #     "-out",
-    #     action="store",
-    #     help="filename for output primer sequences",
-    #     dest="out",
-    #     type=str,
-    #     default="potential_primers_out.csv",
-    # )
-    # args = parser.parse_args()
     aln, labs, target, off = import_files(target_files, off_target_files)
+    index = find_reference_index(target_files, reference_sequence)
+    print(index)
     aln_l, ref = select_ref(aln, target, index=index)
     seq_l = iter_window(ref, window=window, slide_ind=slide, aln=aln, aln_l=aln_l)
     primers_l, target_snps, matches, off_snps = detect_fuzzy_matches(
         seq_l, aln_l, off, aln, max_dif=max_dif
     )
-    df = write_out(primers_l, target_snps, matches, off_snps, out)
+    df = write_out(primers_l, target_snps, matches, off_snps)
 
     return df
 
