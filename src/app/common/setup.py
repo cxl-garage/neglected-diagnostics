@@ -12,7 +12,8 @@ from app.common.constants import (
     SEQVAR_TABLE,
     SEQVAR_TABLE_BTN,
     SEQVAR_TABLE_CALC,
-    TGT_AREA_BTN,
+    TGT_AREA_DF,
+    TGT_AREA_FORM,
 )
 
 
@@ -52,8 +53,9 @@ def init_session_state_seq_var_table() -> None:
 
 def init_session_state_tgt_area() -> None:
     """Initialize the Streamlit session state for the Find Assay Target Area page."""
-    if TGT_AREA_BTN not in st.session_state:
-        st.session_state[TGT_AREA_BTN] = False
+    if TGT_AREA_FORM not in st.session_state:
+        st.session_state[TGT_AREA_FORM] = False
+        st.session_state[TGT_AREA_DF] = pd.DataFrame()
 
 
 def initialize() -> None:

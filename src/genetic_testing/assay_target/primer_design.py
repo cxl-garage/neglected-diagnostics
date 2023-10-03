@@ -11,6 +11,8 @@ import pandas as pd
 from Bio import SeqIO
 from fuzzysearch import find_near_matches
 
+from genetic_testing.assay_target.datatypes import AssayTargetColumns
+
 
 class primer_list:
     def __init__(self, primer_seq, mean_score):
@@ -29,25 +31,26 @@ class exact_match_primer:
         self.n_match = n_match
 
 
-def import_files(target_files, off_target_files):
+def import_files(target_files, off_target_files, reference_sequence):
     target_files_sorted = sorted(target_files, key=lambda x: x.name)
     off_target_files_sorted = sorted(off_target_files, key=lambda x: x.name)
     # targ_fasta_paths = glob.glob(os.path.join(target_path, "*.fasta"))
-    # off_fasta_paths = glob.glob(os.path.join(off_path, "*.fasta"))fasta_file
+    # off_fasta_paths = glob.glob(os.path.join(off_path, "*.fasta"))
 
     # create lists of sequences (target and off target)
     # and labels (0 = target, !0 = off target)
     aln = []
     labs = []
+    index = -1  # default value for the index of the reference sequence
     for fasta_file in target_files_sorted:
         print(fasta_file.name)
 
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            # print(seq_record.id)
-            # print(str(seq_record.seq))
-            # print(len(seq_record))
+            print(seq_record.id)
+            if seq_record.id == reference_sequence:
+                index = i
 
             labs.append(0)
             aln.append(str(seq_record.seq))
@@ -57,10 +60,6 @@ def import_files(target_files, off_target_files):
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            # print(seq_record.id)
-            # print(str(seq_record.seq))
-            # print(len(seq_record))
-
             labs.append(1)
             aln.append(str(seq_record.seq))
 
@@ -74,7 +73,7 @@ def import_files(target_files, off_target_files):
         pickle.dump(target, file)
     with open("./src/exp/off.pkl", "wb") as file:
         pickle.dump(off, file)
-    return (aln, labs, target, off)
+    return (aln, labs, target, off, index)
 
 
 # select reference genome
@@ -83,7 +82,8 @@ def select_ref(aln, target, index=0):
     ref_ind = target[index]
     ref = aln[ref_ind]
     aln_l = deepcopy(target)
-    aln_l.pop(0)
+    # TODO: check if this is the correct way to remove the reference sequence
+    aln_l.pop(index)
     return (aln_l, ref)
 
 
@@ -117,12 +117,13 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, max_dif):
 
 
 def write_out(primers_l, target_snps, matches, off_snps):
+    cols = AssayTargetColumns()
     df = pd.DataFrame(
         {
-            "primers": primers_l,
-            "n_target_seq_match": matches,
-            "n_mismatches_primer_target": target_snps,
-            "n_mismatches_primer_off_target": off_snps,
+            cols.assay_design_area: primers_l,
+            cols.perc_tgt_match: matches,
+            cols.ratio_tgt_mismatch: target_snps,
+            cols.num_off_tgt_mismatch: off_snps,
         }
     )
     return df
@@ -167,22 +168,24 @@ def calc_nuc_dif(primer_seq, aln_l, aln, max_dif):
     return primer_scores
 
 
-def find_reference_index(target_files, reference_sequence):
-    return [file.name for file in target_files].index(reference_sequence)
-
-
 def find_target_area(
     target_files,
     off_target_files,
     reference_sequence,
     window=300,
-    slide=10,
+    slide=20,
     max_dif=5,
 ):
-    aln, labs, target, off = import_files(target_files, off_target_files)
-    index = find_reference_index(target_files, reference_sequence)
+    aln, labs, target, off, index = import_files(
+        target_files, off_target_files, reference_sequence
+    )
+
+    if index == -1:
+        raise ValueError("Reference sequence not found in the target files")
+
     print(index)
     aln_l, ref = select_ref(aln, target, index=index)
+    print(ref)
     seq_l = iter_window(ref, window=window, slide_ind=slide, aln=aln, aln_l=aln_l)
     primers_l, target_snps, matches, off_snps = detect_fuzzy_matches(
         seq_l, aln_l, off, aln, max_dif=max_dif

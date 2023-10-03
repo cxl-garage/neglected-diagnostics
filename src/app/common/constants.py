@@ -14,7 +14,8 @@ SEQVAR_TABLE_CALC = "SEQVAR_TABLE_CALC"
 SEQVAR_TABLE = "SEQVAR_TABLE"
 
 # Session State Keys for Find Assay Target Area page
-TGT_AREA_BTN = "TGT_AREA_BTN"
+TGT_AREA_FORM = "TGT_AREA_FORM"
+TGT_AREA_DF = "TGT_AREA_DF"
 
 # Streamlit UI
 PAGE_LAYOUT = "wide"
