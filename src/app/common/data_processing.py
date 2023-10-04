@@ -1,10 +1,8 @@
-from io import BytesIO, StringIO
-from typing import Dict, List, Union
+from io import BytesIO
+from typing import Dict
 
 import pandas as pd
 import streamlit as st
-from Bio import SeqIO
-from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from app.common.constants import NCBI_DF
 from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns

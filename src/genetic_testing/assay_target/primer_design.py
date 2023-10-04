@@ -1,7 +1,3 @@
-import argparse
-import glob
-import os
-import pickle
 import re
 from copy import deepcopy
 from io import StringIO
@@ -185,7 +181,3 @@ def find_target_area(
     df = write_out(primers_l, target_snps, matches, off_snps)
 
     return df
-
-
-# if __name__ == "__main__":
-#     main()

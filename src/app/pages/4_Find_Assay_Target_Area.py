@@ -1,11 +1,6 @@
-from io import StringIO
-
 import streamlit as st
-from Bio import SeqIO
 
 from app.common.constants import TGT_AREA_DF, TGT_AREA_FORM
-
-# from app.common.data_processing import parse_fasta_files
 from app.common.setup import init_session_state_tgt_area
 from genetic_testing.assay_target.datatypes import AssayTargetColumns
 from genetic_testing.assay_target.primer_design import find_target_area
@@ -13,14 +8,15 @@ from genetic_testing.assay_target.primer_design import find_target_area
 # Initialize the Streamlit session state for this page
 init_session_state_tgt_area()
 
+# Define constants for download options
 CSV_DOWNLOAD = "Download as CSV"
 FASTA_DOWNLOAD = "Download sequences as a fasta file"
 
 # Streamlit app header
 st.header("Find Assay Target Area")
 
+# Create a container for uploading target sequences
 target_container = st.container()
-
 with target_container:
     st.subheader("Upload Target Sequences")
     # Create a place to upload FASTA files
@@ -29,14 +25,15 @@ with target_container:
         key="target_files_uploader",
         type=["fasta", "fas"],
         accept_multiple_files=True,
-        help="Only single FASTA files are allowed",
+        help="Only single FASTA or non-aligned multi-FASTA files are allowed",
     )
 
 st.divider()
 
+# Create a container for uploading off-target sequences
 off_target_container = st.container()
 with off_target_container:
-    st.subheader("Off-Target Sequences")
+    st.subheader("Upload Off-Target Sequences")
 
     # Create a place to upload FASTA files
     off_target_files = st.file_uploader(
@@ -44,23 +41,23 @@ with off_target_container:
         key="off_target_files_uploader",
         type=["fasta", "fas"],
         accept_multiple_files=True,
-        help="Only single FASTA files are allowed",
+        help="Only single FASTA or non-aligned multi-FASTA files are allowed",
     )
 
 st.divider()
 
+# Create a container for target area parameters
 target_area_container = st.container()
 with target_area_container:
     st.subheader("Target Area Parameters")
     with st.form("find_target_area"):
-        # Reference Sequence
+        # Input field for selecting Reference sequence, Target region Size, Target region Slide size, and Maximum allowed differences between primers and targets
         reference_sequence = st.text_input(
             "Select Reference Sequence",
             # [file.name for file in target_files],
             help="If no selection is made, the first file will be used as the reference sequence",
         )
 
-        # Target region size
         tgt_region_size = st.number_input(
             label="Enter the target region size (# of base pairs)",
             min_value=0,
@@ -69,7 +66,6 @@ with target_area_container:
             help="If no value is entered, default value of 300 will be used as the target region size",
         )
 
-        # Target region slide size
         slide_size = st.number_input(
             label="Enter the target region slide size (# of base pairs)",
             min_value=0,
@@ -78,7 +74,6 @@ with target_area_container:
             help="If no value is entered, default value of 20 will be used as the target region slide size",
         )
 
-        # Maximum allowed differences between primers and targets
         max_difference = st.number_input(
             label="Enter the maximum differences allowed between target area and target sequences",
             min_value=0,
@@ -87,6 +82,7 @@ with target_area_container:
             help="If no value is entered, default value of 5 will be used as the maximum differences allowed between target area and target sequences",
         )
 
+        # Button to trigger target area calculation
         submitted = st.form_submit_button("Find Target Area")
         if submitted:
             # Find the target area
@@ -101,13 +97,15 @@ with target_area_container:
                 )
                 st.session_state[TGT_AREA_FORM] = True
             except ValueError as e:
+                # Handle the case where an error occurs during target area calculation
                 st.error(e)
                 st.session_state[TGT_AREA_FORM] = False
 
+# If target area has been successfully calculated, display it and provide download options
 if st.session_state[TGT_AREA_FORM]:
     st.write(st.session_state[TGT_AREA_DF])
 
-    # Create a dropdown menu
+    # Dropdown menu for selecting download format
     download_format = st.selectbox("Select an option:", [CSV_DOWNLOAD, FASTA_DOWNLOAD])
 
     if download_format == CSV_DOWNLOAD:
@@ -123,6 +121,7 @@ if st.session_state[TGT_AREA_FORM]:
         )
 
     elif download_format == FASTA_DOWNLOAD:
+        # Option 2: Download sequences as a FASTA file
         cols = AssayTargetColumns()
         fasta_data = "\n".join(st.session_state[TGT_AREA_DF][cols.assay_design_area])
         st.download_button(
