@@ -32,9 +32,9 @@ RETMAX = 10000
 RETTYPE = "fasta"  # Specifies the record view returned, such as Abstract or MEDLINE from PubMed, or GenPept or FASTA from protein.
 RETMODE = "text"  # Specifies the data format of the records returned, such as plain text, HTML or XML.
 
-if ENTREZ_EMAIL in st.secrets:
-    Entrez.email = st.secrets[ENTREZ_EMAIL]
-else:
+try:
+    Entrez.email = st.secrets.get(ENTREZ_EMAIL, "")
+except FileNotFoundError:
     Entrez.email = os.environ.get(ENTREZ_EMAIL, "")
 
 
