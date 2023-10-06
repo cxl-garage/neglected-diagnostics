@@ -82,29 +82,10 @@ repos:
         # https://pre-commit.com/#top_level-default_language_version
         #language_version: python3.10
  
-    # Make sure Sphinx can build the documentation while explicitly omitting 
-    # notebooks from the docs, so users don't have to wait through the execution 
-    # of each notebook or each commit. By default, these will be checked in the 
-    # GitHub workflows.
-  - repo: local
+  - repo: https://github.com/codespell-project/codespell
+    rev: v2.2.6
     hooks:
-      - id: sphinx-build
-        name: Build documentation with Sphinx
-        entry: sphinx-build
-        language: system
-        always_run: true
-        exclude_types: [file, symlink]
-        args:
-          [
-            "-M", # Run sphinx in make mode, so we can use -D flag later
-                  # Note: -M requires next 3 args to be builder, source, output
-            "html", # Specify builder
-            "./docs", # Source directory of documents
-            "./docs/build/html", # Output directory for rendered documents
-            "-T", # Show full trace back on exception
-            "-E", # Don't use saved env; always read all files
-            "-d", # Flag for cached environment and doctrees
-            "./docs/build/doctrees", # Directory
-            "-D", # Flag to override settings in conf.py
-            "exclude_patterns=notebooks/*", # Exclude our notebooks from pre-commit
-          ]
+      - id: codespell
+        # Checks spelling in `docs/source` and `gnatss` dirs ONLY
+        # Ignores `.ipynb` files and `_build` folders
+        args: ["--skip=*.ipynb,docs/_build", "-w", "docs", "src"]
