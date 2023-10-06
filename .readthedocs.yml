@@ -10,7 +10,7 @@ build:
   tools:
     python: "3.10"
   jobs:
-    pre-build:
+    pre_build:
       # Generate the Sphinx configuration for this Jupyter Book so it builds.
       - "jupyter-book config sphinx docs"    
 
