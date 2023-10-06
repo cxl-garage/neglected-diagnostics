@@ -39,12 +39,9 @@ def import_files(target_files, off_target_files, reference_sequence):
     labs = []
     index = -1  # default value for the index of the reference sequence
     for fasta_file in target_files_sorted:
-        print(fasta_file.name)
-
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
-            print(seq_record.id)
             if seq_record.id == reference_sequence:
                 index = i
 
@@ -52,7 +49,6 @@ def import_files(target_files, off_target_files, reference_sequence):
             aln.append(str(seq_record.seq))
 
     for fasta_file in off_target_files_sorted:
-        print(fasta_file.name)
         # To convert to a string based IO:
         stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
         for i, seq_record in enumerate(SeqIO.parse(stringio, "fasta")):
@@ -171,9 +167,7 @@ def find_target_area(
     if index == -1:
         raise ValueError("Reference sequence not found in the target files")
 
-    print(index)
     aln_l, ref = select_ref(aln, target, index=index)
-    print(ref)
     seq_l = iter_window(ref, window=window, slide_ind=slide, aln=aln, aln_l=aln_l)
     primers_l, target_snps, matches, off_snps = detect_fuzzy_matches(
         seq_l, aln_l, off, aln, max_dif=max_dif
