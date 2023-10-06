@@ -9,14 +9,22 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.10"
+  jobs:
+    pre-build:
+      # Generate the Sphinx configuration for this Jupyter Book so it builds.
+      - "jupyter-book config sphinx docs"    
+
+# Optionally build your docs in additional formats such as PDF and ePub
+formats: []
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
    configuration: docs/conf.py
 
-# Optionally declare the Python requirements required to build your docs
+# Optionally set the version of Python and requirements required to build your docs
 python:
    install:
-   - requirements: docs/requirements.txt
-   - method: pip
-     path: .
+      - method: pip
+        path: .
+        extra_requirements:
+           - docs
