@@ -159,7 +159,7 @@ def _merge_sequence_data(
     df: pd.DataFrame, base_sequence: str, min_count: int
 ) -> pd.DataFrame:
     """
-    Merge sequences having less than `min_count` with similar sequences having a count of atleast `min_count`.
+    Merge sequences having less than `min_count` with similar sequences having a count of at least `min_count`.
 
     Parameters
     ----------

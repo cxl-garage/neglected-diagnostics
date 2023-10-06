@@ -30,6 +30,3 @@ jobs:
     - name: Install notebook requirements
       run: |
         sudo apt-get install pandoc
-    - name: Build docs
-      run: |
-        sphinx-build -T -E -b html -d docs/build/doctrees ./docs docs/build/html
