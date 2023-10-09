@@ -1,4 +1,4 @@
 [run]
 omit =
-    */src/genetic_testing/assay_target/primer_design.py
+    */genetic_testing/assay_target/primer_design.py
     
