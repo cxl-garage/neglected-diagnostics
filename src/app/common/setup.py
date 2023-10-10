@@ -6,8 +6,6 @@ from app.common.constants import (
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,
     PAGE_LAYOUT,
-    SEQVAR_CALC_BTN,
-    SEQVAR_CALCULATED,
     SEQVAR_DF,
     SEQVAR_TABLE,
     SEQVAR_TABLE_BTN,
@@ -37,9 +35,7 @@ def _initialize_session_state() -> None:
 
 def init_session_state_seq_var() -> None:
     """Initialize the Streamlit session state for the Sequence Variability page."""
-    if SEQVAR_CALC_BTN not in st.session_state:
-        st.session_state[SEQVAR_CALC_BTN] = False
-        st.session_state[SEQVAR_CALCULATED] = False
+    if SEQVAR_DF not in st.session_state:
         st.session_state[SEQVAR_DF] = pd.DataFrame()
 
 

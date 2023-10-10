@@ -32,6 +32,8 @@ def _preprocessing(df: pd.DataFrame):
     1. The "Species," "TaxId," "Id," "Gi," and "Status" columns are converted to categorical data type.
     2. The "CreateDate" and "UpdateDate" columns are converted to datetime format.
     """
+    if df.empty:
+        return df
     # Convert columns to categorical
     df["Species"] = df["Species"].astype("category")
     df["TaxId"] = df["TaxId"].astype("category")
