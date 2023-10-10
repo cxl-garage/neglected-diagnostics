@@ -1,0 +1,5 @@
+[run]
+omit =
+# NOTE: Ignore the `genetic_testing/assay_target/primer_design.py` script as SSEC is not the author. This code has been taken from this repository - https://github.com/kmceres/Thylacine_Design/blob/main/general_primer_design/scripts/Primer_opt.py
+    */genetic_testing/assay_target/primer_design.py
+    
