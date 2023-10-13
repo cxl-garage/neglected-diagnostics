@@ -9,4 +9,4 @@ RUN mkdir /root/.streamlit
 COPY deployment/credentials.toml /root/.streamlit/credentials.toml
 COPY .streamlit/secrets.toml /root/.streamlit/secrets.toml
 ENTRYPOINT ["streamlit", "run"]
-CMD ["src/app/main.py", "--server.port", "80"]
+CMD ["src/app/Home.py", "--server.port", "80"]
