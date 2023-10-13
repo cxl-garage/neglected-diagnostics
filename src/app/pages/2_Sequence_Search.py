@@ -63,38 +63,21 @@ with query_col:
         download_format = st.selectbox(
             "Select an option:", [CSV_DOWNLOAD, FASTA_DOWNLOAD]
         )
+        df_download = df_filtered if applied_filters else df_aggrid
         # Option 1: Download the correct DataFrame as CSV
         if download_format == CSV_DOWNLOAD:
-            # User has applied filters using `Add filters` checkbox
-            if applied_filters:
-                st.download_button(
-                    label="Download table as CSV",
-                    data=df_filtered.to_csv(index=False).encode("utf-8"),
-                    file_name="sequence_search_table.csv",
-                    mime="text/csv",
-                    key="df_filtered_csv_button",
-                    help="Click button to Download this table as a CSV file",
-                    args={"as_attachment": True},
-                )
-            # User has not applied filters using `Add filters` checkbox
-            else:
-                st.download_button(
-                    label="Download table as CSV",
-                    data=df_aggrid.to_csv(index=False).encode("utf-8"),
-                    file_name="sequence_search_table.csv",
-                    mime="text/csv",
-                    key="df_aggrid_csv_button",
-                    help="Click button to Download this table as a CSV file",
-                    args={"as_attachment": True},
-                )
+            st.download_button(
+                label=CSV_DOWNLOAD,
+                key="download_csv",
+                data=df_download.to_csv(index=False).encode("utf-8"),
+                file_name="sequence_search_table.csv",
+                mime="text/csv",
+                help="Click button to Download this table as a CSV file",
+                args={"as_attachment": True},
+            )
         # Option 2: Download the correct DataFrame as FASTA
         elif download_format == FASTA_DOWNLOAD:
-            # User has applied filters using `Add filters` checkbox
-            if applied_filters:
-                download_data(database, df_filtered["Id"].unique(), search_term)
-            # User has not applied filters using `Add filters` checkbox
-            else:
-                download_data(database, df_aggrid["Id"].unique(), search_term)
+            download_data(database, df_download["Id"].unique(), search_term)
 with summary_col:
     # Show the summary only if user has submitted the query form
     if st.session_state[NCBI_SUMMARY_FORM]:
