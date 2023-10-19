@@ -45,7 +45,7 @@ NOTE: You can also/alternatively run `pre-commit run` (changes only) or `pre-com
 You are now ready to run the Neglected Diagnostics Streamlit application:
 
 ```bash
-streamlit run src/app/main.py
+streamlit run src/app/Home.py
 ```
 
 
