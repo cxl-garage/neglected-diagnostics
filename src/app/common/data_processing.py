@@ -11,7 +11,9 @@ from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns
 def format_ncbi_summary() -> None:
     """Format and restructure the NCBI summary DataFrame.
 
-    This function performs formatting and restructuring tasks on the NCBI summary DataFrame, which is assumed to be stored in the Streamlit session state under the key specified by the constant `NCBI_DF`. The function performs the following actions:
+    This function performs formatting and restructuring tasks on the NCBI summary DataFrame, which is assumed to be
+    stored in the Streamlit session state under the key specified by the constant `NCBI_DF`. The function performs
+    the following actions:
 
     1. Extract the "Species" information from the "Title" column and store it in a new "Species" column.
     2. Convert the "Species" column to a categorical data type.
@@ -113,7 +115,8 @@ def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
     Parameters
     ----------
     df : pd.DataFrame
-        A DataFrame containing sequence variability data. It is expected to have `Sequence`, `Group_Number`, and `Count` columns.
+        A DataFrame containing sequence variability data. It is expected to have `Sequence`, `Group_Number`,
+        and `Count` columns.
 
     species : str, optional
         The name of the species, by default `species`.
