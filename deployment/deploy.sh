@@ -30,3 +30,4 @@ az acr create --name $ACR --resource-group $GRP --sku basic --admin-enabled true
 az appservice plan create -g $GRP -n $PLAN -l $LOC --is-linux --sku B3
 az webapp create -g $GRP -p $PLAN -n $APP -i $IMG
 az webapp deployment container config  -g $GRP -n $APP --enable-cd true
+az webapp restart -g $GRP -n $APP
