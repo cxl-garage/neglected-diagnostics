@@ -11,6 +11,7 @@ init_session_state_tgt_area()
 # Define constants for download options
 CSV_DOWNLOAD = "Download as CSV"
 FASTA_DOWNLOAD = "Download sequences as a fasta file"
+TARGET_AREA_PREFIX = "Targetarea"
 
 # Streamlit app header
 st.header("Find Assay Target Area")
@@ -51,7 +52,8 @@ target_area_container = st.container()
 with target_area_container:
     st.subheader("Target Area Parameters")
     with st.form("find_target_area"):
-        # Input field for selecting Reference sequence, Target region Size, Target region Slide size, and Maximum allowed differences between primers and targets
+        # Input field for selecting Reference sequence, Target region Size, Target region Slide size, and Maximum
+        # allowed differences between primers and targets
         reference_sequence = st.text_input(
             "Select Reference Sequence",
             # [file.name for file in target_files],
@@ -79,7 +81,8 @@ with target_area_container:
             min_value=0,
             value=5,
             step=1,
-            help="If no value is entered, default value of 5 will be used as the maximum differences allowed between target area and target sequences",
+            help="If no value is entered, default value of 5 will be used as the maximum differences allowed between "
+            "target area and target sequences",
         )
 
         # Button to trigger target area calculation
@@ -123,7 +126,11 @@ if st.session_state[TGT_AREA_FORM]:
     elif download_format == FASTA_DOWNLOAD:
         # Option 2: Download sequences as a FASTA file
         cols = AssayTargetColumns()
-        fasta_data = "\n".join(st.session_state[TGT_AREA_DF][cols.assay_design_area])
+        df = st.session_state[TGT_AREA_DF]
+        seqs = df[cols.assay_design_area].tolist()
+        fasta_data = "\n".join(
+            [f"{TARGET_AREA_PREFIX}{i+1}\n{seq}" for i, seq in enumerate(seqs)]
+        )
         st.download_button(
             label="Download Fasta",
             data=fasta_data,
