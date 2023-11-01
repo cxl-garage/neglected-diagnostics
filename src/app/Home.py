@@ -1,6 +1,8 @@
 import streamlit as st
 
-# Read and display the content from the Markdown file
-with open("home_markdown.md", "r") as f:
-    content = f.read()
-st.markdown(content)
+st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+
+from common.render_method import render_markdown
+
+# st.sidebar.image('Conservation X Labs CXL logo.png', use_column_width=True)
+render_markdown("home_markdown.md")

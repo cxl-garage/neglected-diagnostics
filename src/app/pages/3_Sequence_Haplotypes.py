@@ -1,6 +1,7 @@
 from io import BytesIO
 
 import streamlit as st
+from common.render_method import render_markdown
 
 from app.common.constants import SEQVAR_DF
 from app.common.data_processing import read_fasta
@@ -10,11 +11,16 @@ from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_sequence_variability,
 )
 
+st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+
 # Initialize the Streamlit session state for this page
 init_session_state_seq_var()
 
 # Streamlit app header
-st.header("Calculate Sequence Variability")
+st.header("Determine Sequence Haplotypes")
+
+render_markdown("sequence_haplotypes_guide.md")
+
 
 # File uploader
 uploaded_file = st.file_uploader("Upload a FASTA file", type=["fasta"])
