@@ -1,5 +1,5 @@
 """Demo App for Neglected Diagnostics.
-This is a demo app for neglected diagnostics built using Streamlit and Biopython. The PIs want me to build a quick prototype. So, I am first focusing on building a quick prototype that implements things end to end and then work towards improving individual modules.
+This is an app for neglected diagnostics built using Streamlit and Biopython.
 """
 
 
@@ -11,6 +11,7 @@ from app.common import data_processing, setup
 from app.common.constants import (
     MAIN_PAGE_COLS_GAP,
     MAIN_PAGE_COLS_SIZE,
+    MAX_SEQUENCE_LENGTH_DOWNLOAD,
     NCBI_DF,
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,
@@ -56,30 +57,39 @@ with query_col:
     df_filtered, applied_filters = filter_dataframe(df_aggrid)
     if st.session_state[NCBI_DF_FILTER]:
         st.dataframe(df_filtered)
-        st.write(f"Size of final data: {len(df_filtered)}")
         # Streamlit UI to show the applied filters
         show_filters_info(applied_filters)
     # User has made a search query
     if not df_aggrid.empty:
-        # Dropdown menu for selecting download format
-        download_format = st.selectbox(
-            "Select an option:", [CSV_DOWNLOAD, FASTA_DOWNLOAD]
-        )
         df_download = df_filtered if applied_filters else df_aggrid
-        # Option 1: Download the correct DataFrame as CSV
-        if download_format == CSV_DOWNLOAD:
-            st.download_button(
-                label=CSV_DOWNLOAD,
-                key="download_csv",
-                data=df_download.to_csv(index=False).encode("utf-8"),
-                file_name="sequence_search_table.csv",
-                mime="text/csv",
-                help="Click button to Download this table as a CSV file",
-                args={"as_attachment": True},
+        total_length = df_download["Length"].sum()
+        st.write(
+            f"Size of final data: {len(df_download)} rows, {total_length:,} total base pairs"
+        )
+        if total_length > MAX_SEQUENCE_LENGTH_DOWNLOAD:
+            st.warning(
+                f"The total length of the sequences is {total_length:,}, which is more than the allowed max "
+                f"({MAX_SEQUENCE_LENGTH_DOWNLOAD:,}). Please apply filters to reduce the size of the dataset."
             )
-        # Option 2: Download the correct DataFrame as FASTA
-        elif download_format == FASTA_DOWNLOAD:
-            download_data(database, df_download["Id"].unique(), search_term)
+        else:
+            # Dropdown menu for selecting download format
+            download_format = st.selectbox(
+                "Select an option:", [FASTA_DOWNLOAD, CSV_DOWNLOAD]
+            )
+            # Option 1: Download the correct DataFrame as CSV
+            if download_format == CSV_DOWNLOAD:
+                st.download_button(
+                    label=CSV_DOWNLOAD,
+                    key="download_csv",
+                    data=df_download.to_csv(index=False).encode("utf-8"),
+                    file_name="sequence_search_table.csv",
+                    mime="text/csv",
+                    help="Click button to Download this table as a CSV file",
+                    args={"as_attachment": True},
+                )
+            # Option 2: Download the correct DataFrame as FASTA
+            elif download_format == FASTA_DOWNLOAD:
+                download_data(database, df_download["Id"].unique(), search_term)
 with summary_col:
     # Show the summary only if user has submitted the query form
     if st.session_state[NCBI_SUMMARY_FORM]:
