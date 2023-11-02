@@ -37,4 +37,4 @@ This tool analyzes a set of sequences labeled as Target (sequences that the diag
 ### Example files
 coming soon
 
-Powered by Conservation X Labs and the University of Washington Scientific Software Engineering Center at the eSciences Institute.
+Powered by Conservation X Labs and the University of Washington Scientific Software Engineering Center at the eScience Institute.
