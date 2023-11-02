@@ -31,7 +31,7 @@ FASTA_DOWNLOAD = "Download sequences as a fasta file"
 query_col, summary_col = st.columns(MAIN_PAGE_COLS_SIZE, gap=MAIN_PAGE_COLS_GAP)
 with query_col:
     st.header("Neglected Diagnostics: Democratizing Genetic Testing!")
-    render_markdown("sequence_search_quick_guide.md")
+    render_markdown("src/app/sequence_search_quick_guide.md")
     # Streamlit form to capture search conditions
     with st.form("query"):
         database = st.selectbox("Select the database to search", ("nucleotide", "gene"))
@@ -86,4 +86,4 @@ with summary_col:
         st.header("Top Organisms")
         st.write(data_processing.get_top_organisms_counts(TOP_N_ORGANISMS))
 
-st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)

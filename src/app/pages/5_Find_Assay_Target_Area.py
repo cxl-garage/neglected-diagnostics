@@ -6,7 +6,7 @@ from app.common.setup import init_session_state_tgt_area
 from genetic_testing.assay_target.datatypes import AssayTargetColumns
 from genetic_testing.assay_target.primer_design import find_target_area
 
-st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 
 # Initialize the Streamlit session state for this page
@@ -19,7 +19,7 @@ FASTA_DOWNLOAD = "Download sequences as a fasta file"
 # Streamlit app header
 st.header("Find Assay Target Area")
 
-render_markdown("find_assay_target_guide.md")
+render_markdown("src/app/find_assay_target_guide.md")
 
 # Create a container for uploading target sequences
 target_container = st.container()

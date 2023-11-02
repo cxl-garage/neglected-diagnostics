@@ -11,7 +11,7 @@ from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_sequence_variability,
 )
 
-st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 # Initialize the Streamlit session state for this page
 init_session_state_seq_var()
@@ -19,7 +19,7 @@ init_session_state_seq_var()
 # Streamlit app header
 st.header("Determine Sequence Haplotypes")
 
-render_markdown("sequence_haplotypes_guide.md")
+render_markdown("src/app/sequence_haplotypes_guide.md")
 
 
 # File uploader

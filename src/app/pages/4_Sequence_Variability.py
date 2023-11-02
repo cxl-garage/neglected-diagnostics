@@ -10,7 +10,7 @@ from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_seq_variability_table,
 )
 
-st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 
 # Initialize the Streamlit session state for this page
@@ -19,7 +19,7 @@ init_session_state_seq_var_table()
 # Streamlit app header
 st.header("Calculate Sequence Variability")
 
-render_markdown("sequence_variability_guide.md")
+render_markdown("src/app/sequence_variability_guide.md")
 
 # File uploader
 uploaded_file = st.file_uploader("Upload a FASTA file", type=["fasta"])
