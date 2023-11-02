@@ -67,5 +67,5 @@ def download_seq_var_data(df: pd.DataFrame, species: str) -> None:
     st.download_button(
         label="Download FASTA file",
         data=fasta_str,
-        file_name=f"sequence_variability_{species}.fasta",
+        file_name=f"sequence_haplotypes_{species}.fasta",
     )
