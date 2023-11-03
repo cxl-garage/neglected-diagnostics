@@ -4,3 +4,4 @@ python-Levenshtein>=0.21.1
 pydantic>=2.3.0
 fuzzysearch>=0.7.3
 streamlit-aggrid>=0.3.4
+pyinstaller
