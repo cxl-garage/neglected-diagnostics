@@ -1,16 +1,17 @@
+
 # -*- mode: python ; coding: utf-8 -*-
 from PyInstaller.utils.hooks import collect_data_files
 from PyInstaller.utils.hooks import copy_metadata
 
-datas = [("./neglected-diagnostics-venv/lib/python3.9/site-packages/streamlit/runtime", "./streamlit/runtime")]
+datas = [("./neglected-diagnostics-venv/Lib/site-packages/streamlit/runtime", "./streamlit/runtime")]
 datas += collect_data_files("streamlit")
 datas += copy_metadata("streamlit")
 datas += [("./app", "./app")]
 datas += [("./genetic_testing", "./genetic_testing")]
 datas += [("./utils", "./utils")]
-datas += [("./neglected-diagnostics-venv/lib/python3.9/site-packages/Bio", "./Bio")]
-datas += [("./neglected-diagnostics-venv/lib/python3.9/site-packages/st_aggrid", "./st_aggrid")]
-datas += [("./neglected-diagnostics-venv/lib/python3.9/site-packages/pyarrow", "./pyarrow")]
+datas += [("./neglected-diagnostics-venv/Lib/site-packages/Bio", "./Bio")]
+datas += [("./neglected-diagnostics-venv/Lib/site-packages/st_aggrid", "./st_aggrid")]
+datas += [("./neglected-diagnostics-venv/Lib/site-packages/pyarrow", "./pyarrow")]
 
 block_cipher = None
 
@@ -41,12 +42,13 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True,
+    console=False,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['assets\\CXL.ico'],
 )
 coll = COLLECT(
     exe,
@@ -57,3 +59,4 @@ coll = COLLECT(
     upx_exclude=[],
     name='ndiag',
 )
+
