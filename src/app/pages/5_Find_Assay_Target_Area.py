@@ -63,7 +63,7 @@ with target_area_container:
         reference_sequence = st.text_input(
             "Select Reference Sequence",
             # [file.name for file in target_files],
-            help="If no selection is made, the first file will be used as the reference sequence",
+            help="Please input filename that will be used as the reference sequence",
         )
 
         tgt_region_size = st.number_input(
@@ -82,12 +82,21 @@ with target_area_container:
             help="If no value is entered, default value of 20 will be used as the target region slide size",
         )
 
-        max_difference = st.number_input(
-            label="Enter the maximum differences allowed between target area and target sequences",
+        max_differenc_o = st.number_input(
+            label="Enter the maximum differences allowed between primer and target sequences",
             min_value=0,
             value=5,
             step=1,
             help="If no value is entered, default value of 5 will be used as the maximum differences allowed between "
+            "target area and target sequences",
+        )
+
+        max_difference_ot = st.number_input(
+            label="Enter the maximum differences allowed between primer and off-target sequences",
+            min_value=0,
+            value=15,
+            step=1,
+            help="If no value is entered, default value of 15 will be used as the maximum differences allowed between "
             "target area and target sequences",
         )
 
@@ -102,7 +111,8 @@ with target_area_container:
                     reference_sequence=reference_sequence,
                     window=tgt_region_size,
                     slide=slide_size,
-                    max_dif=max_difference,
+                    maxDif_t=max_differenc_o,
+                    maxDif_ot=max_difference_ot,
                 )
                 st.session_state[TGT_AREA_FORM] = True
             except ValueError as e:

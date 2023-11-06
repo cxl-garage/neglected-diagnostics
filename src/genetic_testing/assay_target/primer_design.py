@@ -16,13 +16,14 @@ from genetic_testing.assay_target.datatypes import AssayTargetColumns
 
 
 class primer_list:
-    def __init__(self, primer_seq, mean_score):
+    def __init__(self, primer_seq, mean_score, bpwise_score):
         """
 
         :rtype: object
         """
         self.primer_seq = primer_seq
         self.mean_score = mean_score
+        self.bpwise_score = bpwise_score
 
 
 class exact_match_primer:
@@ -71,8 +72,9 @@ def select_ref(aln, target, index=0):
     ref_ind = target[index]
     ref = aln[ref_ind]
     aln_l = deepcopy(target)
-    # TODO: check if this is the correct way to remove the reference sequence
-    aln_l.pop(index)
+    # Remove reference from target list by index
+    del aln_l[ref_ind]
+
     return (aln_l, ref)
 
 
@@ -87,34 +89,48 @@ def iter_window(ref, window, slide_ind, aln, aln_l):
     return seq_l
 
 
-def detect_fuzzy_matches(seq_l, aln_l, off, aln, max_dif):
+def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
     # for low matches and no matches, get hamming dist
     primers_l = []
     matches = []  # number of exact matches
     target_snps = []  # avg hamming distance primer-target
+    target_snps_bpwise = []  # bp wise error percentage
     off_snps = []  # avg hamming distance primer-off
     if len(seq_l) > 0:
         for i in range(len(seq_l)):
             primer_seq = seq_l[i].primer_seq
-            new_target = calc_nuc_dif(primer_seq, aln_l, aln, max_dif)
-            new_off_target = calc_nuc_dif(primer_seq, off, aln, max_dif)
+            new_target = calc_nuc_dif(primer_seq, aln_l, aln, maxDif_t)
+            new_off_target = calc_nuc_dif(primer_seq, off, aln, maxDif_ot)
             primers_l.append(primer_seq)
-            matches.append(seq_l[i].n_match / len(aln_l))
+            matches.append(seq_l[i].n_match / len(aln_l) * 100)
             target_snps.append(new_target.mean_score)
+            target_snps_bpwise.append(new_target.bpwise_score)
             off_snps.append(new_off_target.mean_score)
-    return (primers_l, target_snps, matches, off_snps)
+    return (primers_l, target_snps, target_snps_bpwise, matches, off_snps)
 
 
-def write_out(primers_l, target_snps, matches, off_snps):
+def write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps):
     cols = AssayTargetColumns()
     df = pd.DataFrame(
         {
             cols.assay_design_area: primers_l,
             cols.perc_tgt_match: matches,
             cols.ratio_tgt_mismatch: target_snps,
+            cols.bpwise_error_percentage_tgt_mismatch: target_snps_bpwise,
             cols.num_off_tgt_mismatch: off_snps,
         }
     )
+    df.sort_values(
+        by=[
+            "% target match",
+            "Average of target mismatches",
+            "Bpwise error percentage of target mismatches",
+            "Minimum # off-target mismatches",
+        ],
+        ascending=[False, True, True, False],
+        inplace=True,
+    )
+
     return df
     # df.to_csv(filename, index=False)
 
@@ -153,7 +169,9 @@ def calc_nuc_dif(primer_seq, aln_l, aln, max_dif):
         else:
             mismatch_l.append(max_dif)
     mean_score = np.mean(mismatch_l)
-    primer_scores = primer_list(primer_seq, mean_score)
+    mean_seq_len = sum(map(len, aln)) / len(aln)
+    bpwise_score = mean_score / mean_seq_len * 100
+    primer_scores = primer_list(primer_seq, mean_score, bpwise_score)
     return primer_scores
 
 
@@ -163,7 +181,8 @@ def find_target_area(
     reference_sequence,
     window=300,
     slide=20,
-    max_dif=5,
+    maxDif_t=5,
+    maxDif_ot=15,
 ):
     aln, labs, target, off, index = import_files(
         target_files, off_target_files, reference_sequence
@@ -174,9 +193,15 @@ def find_target_area(
 
     aln_l, ref = select_ref(aln, target, index=index)
     seq_l = iter_window(ref, window=window, slide_ind=slide, aln=aln, aln_l=aln_l)
-    primers_l, target_snps, matches, off_snps = detect_fuzzy_matches(
-        seq_l, aln_l, off, aln, max_dif=max_dif
+    (
+        primers_l,
+        target_snps,
+        target_snps_bpwise,
+        matches,
+        off_snps,
+    ) = detect_fuzzy_matches(
+        seq_l, aln_l, off, aln, maxDif_t=maxDif_t, maxDif_ot=maxDif_ot
     )
-    df = write_out(primers_l, target_snps, matches, off_snps)
+    df = write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps)
 
     return df
