@@ -69,7 +69,6 @@ with target_area_container:
             get_first_header(target_files),
             help="If no selection is made, the first sequence header in the first file will be used as the reference "
             "sequence",
-
         )
 
         tgt_region_size = st.number_input(
