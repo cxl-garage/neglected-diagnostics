@@ -1,11 +1,14 @@
 import streamlit as st
 from common.render_method import render_markdown
 
-from app.common.constants import TGT_AREA_DF, TGT_AREA_FORM
+from app.common import setup
+from app.common.constants import NAVIGATE_WARNING_MD, TGT_AREA_DF, TGT_AREA_FORM
+from app.common.data_processing import get_first_header
 from app.common.setup import init_session_state_tgt_area
 from genetic_testing.assay_target.datatypes import AssayTargetColumns
 from genetic_testing.assay_target.primer_design import find_target_area
 
+setup.initialize()
 st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 
@@ -20,6 +23,7 @@ TARGET_AREA_PREFIX = "Targetarea"
 # Streamlit app header
 st.header("Find Assay Target Area")
 
+st.markdown(NAVIGATE_WARNING_MD)
 render_markdown("src/app/find_assay_target_guide.md")
 
 # Create a container for uploading target sequences
@@ -62,8 +66,10 @@ with target_area_container:
         # allowed differences between primers and targets
         reference_sequence = st.text_input(
             "Select Reference Sequence",
-            # [file.name for file in target_files],
-            help="Please input the filename that will be used as the reference sequence",
+            get_first_header(target_files),
+            help="If no selection is made, the first sequence header in the first file will be used as the reference "
+            "sequence",
+
         )
 
         tgt_region_size = st.number_input(

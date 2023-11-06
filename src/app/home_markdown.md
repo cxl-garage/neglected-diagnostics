@@ -32,9 +32,9 @@ This tool analyzes aligned multiple sequence fasta files to generate a variabili
 This tool analyzes a set of sequences labeled as Target (sequences that the diagnostic assay should detect) against a set of sequences labeled as Off-Target (sequences that the diagnostic assay should NOT detect) to identify areas where targets are conserved but dissimilar to the off-targets. This comparison is done along the entire length of the reference target sequence by splitting up the pairwise comparison into smaller windows that slide along the sequences. Further details on this algorithm can be found [here](https://github.com/kmceres/Thylacine_Design/tree/main/general_primer_design).  
 
 ### Download Locally
-[Instructions](https://github.com/aniketfadia96/neglected-diagnostics/blob/contributing-guide/CONTRIBUTING.md)
+[Instructions](https://github.com/uw-ssec/neglected-diagnostics/blob/main/CONTRIBUTING.md)
 
 ### Example files
 coming soon
 
-Powered by Conservation X Labs and the University of Washington Scientific Software Engineering Center at the eSciences Institute.
+Powered by Conservation X Labs and the University of Washington Scientific Software Engineering Center at the eScience Institute.
