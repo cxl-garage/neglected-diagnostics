@@ -3,7 +3,8 @@ from io import BytesIO
 import streamlit as st
 from common.render_method import render_markdown
 
-from app.common.constants import SEQVAR_DF
+from app.common import setup
+from app.common.constants import NAVIGATE_WARNING_MD, SEQVAR_DF
 from app.common.data_processing import read_fasta
 from app.common.setup import init_session_state_seq_var
 from app.frontend.download_data import download_seq_var_data
@@ -11,6 +12,7 @@ from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_sequence_variability,
 )
 
+setup.initialize()
 st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 # Initialize the Streamlit session state for this page
@@ -19,6 +21,7 @@ init_session_state_seq_var()
 # Streamlit app header
 st.header("Determine Sequence Haplotypes")
 
+st.markdown(NAVIGATE_WARNING_MD)
 render_markdown("src/app/sequence_haplotypes_guide.md")
 
 

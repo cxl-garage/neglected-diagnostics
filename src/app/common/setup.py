@@ -23,7 +23,9 @@ def _initialize_UI() -> None:
 def _initialize_session_state() -> None:
     """Initialize the Streamlit session state.
 
-    This function initializes the Streamlit session state by checking the existence of specific keys for storing data and state variables. If any of these keys are not present in the session state, the function creates them and sets their initial values.
+    This function initializes the Streamlit session state by checking the existence of specific keys for storing data
+    and state variables. If any of these keys are not present in the session state, the function creates them and sets
+    their initial values.
     """
     if NCBI_SUMMARY_FORM not in st.session_state:
         st.session_state[NCBI_SUMMARY_FORM] = False

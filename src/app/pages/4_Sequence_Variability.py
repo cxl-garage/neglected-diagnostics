@@ -3,13 +3,20 @@ from io import BytesIO
 import streamlit as st
 from common.render_method import render_markdown
 
-from app.common.constants import SEQVAR_TABLE, SEQVAR_TABLE_BTN, SEQVAR_TABLE_CALC
+from app.common import setup
+from app.common.constants import (
+    NAVIGATE_WARNING_MD,
+    SEQVAR_TABLE,
+    SEQVAR_TABLE_BTN,
+    SEQVAR_TABLE_CALC,
+)
 from app.common.data_processing import read_fasta
 from app.common.setup import init_session_state_seq_var_table
 from genetic_testing.sequence_analysis.sequence_variability import (
     calculate_seq_variability_table,
 )
 
+setup.initialize()
 st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
 
 
@@ -19,6 +26,7 @@ init_session_state_seq_var_table()
 # Streamlit app header
 st.header("Calculate Sequence Variability")
 
+st.markdown(NAVIGATE_WARNING_MD)
 render_markdown("src/app/sequence_variability_guide.md")
 
 # File uploader

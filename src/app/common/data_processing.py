@@ -1,8 +1,9 @@
 from io import BytesIO
-from typing import Dict
+from typing import Dict, List, Optional
 
 import pandas as pd
 import streamlit as st
+from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from app.common.constants import NCBI_DF
 from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns
@@ -109,6 +110,27 @@ def read_fasta(file: BytesIO) -> Dict[str, str]:
     return sequences
 
 
+def get_first_header(files: List[UploadedFile]) -> Optional[str]:
+    """
+    Read the first FASTA file in the given list and return the first header.
+
+    Parameters
+    ----------
+    files : List[str]
+        A list of file paths to FASTA files.
+
+    Returns
+    -------
+    Optional[str]
+        The first header in the first FASTA file, or None if the list is empty.
+    """
+    if len(files) == 0:
+        return None
+
+    sequences = read_fasta(BytesIO(files[0].read()))
+    return next(iter(sequences.keys()), None)
+
+
 def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
     """Convert a sequence variability DataFrame to FASTA format string.
 
@@ -135,4 +157,5 @@ def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
 
         fasta_str.append(f">Group{group_number}_{species}_{count}\n{sequence}")
 
+    return "\n".join(fasta_str)
     return "\n".join(fasta_str)

@@ -20,6 +20,8 @@ PAGE_LAYOUT = "wide"
 MAIN_PAGE_COLS_SIZE = [0.8, 0.2]
 MAIN_PAGE_COLS_GAP = "small"
 TOP_N_ORGANISMS = 15
+NAVIGATE_WARNING_MD = """:warning: :blue[**Navigating away from this tab will interrupt the current process and lose
+input data**]"""
 
 # Search page limits
 MAX_SEQUENCE_LENGTH_DOWNLOAD = 10000000
