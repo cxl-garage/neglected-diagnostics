@@ -102,7 +102,7 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
             new_target = calc_nuc_dif(primer_seq, aln_l, aln, maxDif_t)
             new_off_target = calc_nuc_dif(primer_seq, off, aln, maxDif_ot)
             primers_l.append(primer_seq)
-            matches.append(seq_l[i].n_match / len(aln_l) * 100)
+            matches.append((seq_l[i].n_match / len(aln_l)) * 100)
             target_snps.append(new_target.mean_score)
             target_snps_bpwise.append(new_target.bpwise_score)
             off_snps.append(new_off_target.mean_score)
@@ -170,7 +170,7 @@ def calc_nuc_dif(primer_seq, aln_l, aln, max_dif):
             mismatch_l.append(max_dif)
     mean_score = np.mean(mismatch_l)
     mean_seq_len = sum(map(len, aln)) / len(aln)
-    bpwise_score = mean_score / mean_seq_len * 100
+    bpwise_score = (mean_score / mean_seq_len) * 100
     primer_scores = primer_list(primer_seq, mean_score, bpwise_score)
     return primer_scores
 

@@ -63,12 +63,12 @@ with target_area_container:
         reference_sequence = st.text_input(
             "Select Reference Sequence",
             # [file.name for file in target_files],
-            help="Please input filename that will be used as the reference sequence",
+            help="Please input the filename that will be used as the reference sequence",
         )
 
         tgt_region_size = st.number_input(
             label="Enter the target region size (# of base pairs)",
-            min_value=0,
+            min_value=60,
             value=300,
             step=1,
             help="If no value is entered, default value of 300 will be used as the target region size",
@@ -88,16 +88,16 @@ with target_area_container:
             value=5,
             step=1,
             help="If no value is entered, default value of 5 will be used as the maximum differences allowed between "
-            "target area and target sequences",
+            "primer and target sequences",
         )
 
         max_difference_ot = st.number_input(
             label="Enter the maximum differences allowed between primer and off-target sequences",
-            min_value=0,
-            value=15,
+            min_value=10,
+            value=30,
             step=1,
             help="If no value is entered, default value of 15 will be used as the maximum differences allowed between "
-            "target area and target sequences",
+            "primer and off-target sequences",
         )
 
         # Button to trigger target area calculation
