@@ -12,6 +12,7 @@ from app.common.constants import (
     MAIN_PAGE_COLS_GAP,
     MAIN_PAGE_COLS_SIZE,
     MAX_SEQUENCE_LENGTH_DOWNLOAD,
+    NAVIGATE_WARNING_MD,
     NCBI_DF,
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,
@@ -32,6 +33,7 @@ FASTA_DOWNLOAD = "Download sequences as a fasta file"
 query_col, summary_col = st.columns(MAIN_PAGE_COLS_SIZE, gap=MAIN_PAGE_COLS_GAP)
 with query_col:
     st.header("Neglected Diagnostics: Democratizing Genetic Testing!")
+    st.markdown(NAVIGATE_WARNING_MD)
     render_markdown("src/app/sequence_search_quick_guide.md")
     # Streamlit form to capture search conditions
     with st.form("query"):
