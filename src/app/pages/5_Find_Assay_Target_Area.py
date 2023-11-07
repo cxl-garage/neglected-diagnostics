@@ -67,6 +67,7 @@ with target_area_container:
         reference_sequence = st.selectbox(
             "Select Reference Sequence",
             get_headers(target_files),
+            help="Select from the dropdown or type in the sequence header for the desired reference sequence",
             key="sequence",
         )
 
