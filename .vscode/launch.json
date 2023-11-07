@@ -5,7 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "Python: Unit tests",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "justMyCode": true
+        },
+        {
+            "name": "Streamlit App",
             "type": "python",
             "request": "launch",
             "module": "streamlit",
