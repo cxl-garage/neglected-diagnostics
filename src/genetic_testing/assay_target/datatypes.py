@@ -7,6 +7,6 @@ class AssayTargetColumns(BaseModel):
     perc_tgt_match: str = "% target match"
     ratio_tgt_mismatch: str = "Average of target mismatches"
     bpwise_error_percentage_tgt_mismatch: str = (
-        "Bpwise error percentage of target mismatches"
+        "BP error percentage of target mismatches"
     )
     num_off_tgt_mismatch: str = "Minimum # off-target mismatches"

@@ -122,10 +122,10 @@ def write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps):
     )
     df.sort_values(
         by=[
-            "% target match",
-            "Average of target mismatches",
-            "Bpwise error percentage of target mismatches",
-            "Minimum # off-target mismatches",
+            cols.perc_tgt_match,
+            cols.ratio_tgt_mismatch,
+            cols.bpwise_error_percentage_tgt_mismatch,
+            cols.num_off_tgt_mismatch,
         ],
         ascending=[False, True, True, False],
         inplace=True,
