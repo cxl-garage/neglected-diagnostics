@@ -3,7 +3,7 @@ from common.render_method import render_markdown
 
 from app.common import setup
 from app.common.constants import NAVIGATE_WARNING_MD, TGT_AREA_DF, TGT_AREA_FORM
-from app.common.data_processing import get_first_header
+from app.common.data_processing import get_headers
 from app.common.setup import init_session_state_tgt_area
 from genetic_testing.assay_target.datatypes import AssayTargetColumns
 from genetic_testing.assay_target.primer_design import find_target_area
@@ -64,11 +64,10 @@ with target_area_container:
     with st.form("find_target_area"):
         # Input field for selecting Reference sequence, Target region Size, Target region Slide size, and Maximum
         # allowed differences between primers and targets
-        reference_sequence = st.text_input(
+        reference_sequence = st.selectbox(
             "Select Reference Sequence",
-            get_first_header(target_files),
-            help="If no selection is made, the first sequence header in the first file will be used as the reference "
-            "sequence",
+            get_headers(target_files),
+            key="sequence",
         )
 
         tgt_region_size = st.number_input(

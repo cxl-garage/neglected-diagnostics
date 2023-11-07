@@ -110,9 +110,9 @@ def read_fasta(file: BytesIO) -> Dict[str, str]:
     return sequences
 
 
-def get_first_header(files: List[UploadedFile]) -> Optional[str]:
+def get_headers(files: List[UploadedFile]) -> List[str]:
     """
-    Read the first FASTA file in the given list and return the first header.
+    Read the FASTA files in the given list and return a list of headers.
 
     Parameters
     ----------
@@ -121,14 +121,14 @@ def get_first_header(files: List[UploadedFile]) -> Optional[str]:
 
     Returns
     -------
-    Optional[str]
-        The first header in the first FASTA file, or None if the list is empty.
+    List[str]
+        A list of headers from the given FASTA files.
     """
-    if len(files) == 0:
-        return None
-
-    sequences = read_fasta(BytesIO(files[0].read()))
-    return next(iter(sequences.keys()), None)
+    headers = []
+    for file in files:
+        sequences = read_fasta(BytesIO(file.read()))
+        headers.extend(sequences.keys())
+    return sorted(headers)
 
 
 def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
