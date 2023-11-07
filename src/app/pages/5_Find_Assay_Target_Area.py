@@ -73,7 +73,7 @@ with target_area_container:
 
         tgt_region_size = st.number_input(
             label="Enter the target region size (# of base pairs)",
-            min_value=0,
+            min_value=60,
             value=300,
             step=1,
             help="If no value is entered, default value of 300 will be used as the target region size",
@@ -87,13 +87,22 @@ with target_area_container:
             help="If no value is entered, default value of 20 will be used as the target region slide size",
         )
 
-        max_difference = st.number_input(
-            label="Enter the maximum differences allowed between target area and target sequences",
+        max_differenc_o = st.number_input(
+            label="Enter the maximum differences allowed between primer and target sequences",
             min_value=0,
             value=5,
             step=1,
             help="If no value is entered, default value of 5 will be used as the maximum differences allowed between "
-            "target area and target sequences",
+            "primer and target sequences",
+        )
+
+        max_difference_ot = st.number_input(
+            label="Enter the maximum differences allowed between primer and off-target sequences",
+            min_value=10,
+            value=30,
+            step=1,
+            help="If no value is entered, default value of 15 will be used as the maximum differences allowed between "
+            "primer and off-target sequences",
         )
 
         # Button to trigger target area calculation
@@ -107,7 +116,8 @@ with target_area_container:
                     reference_sequence=reference_sequence,
                     window=tgt_region_size,
                     slide=slide_size,
-                    max_dif=max_difference,
+                    maxDif_t=max_differenc_o,
+                    maxDif_ot=max_difference_ot,
                 )
                 st.session_state[TGT_AREA_FORM] = True
             except ValueError as e:
