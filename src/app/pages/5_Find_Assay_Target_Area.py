@@ -18,7 +18,7 @@ init_session_state_tgt_area()
 # Define constants for download options
 CSV_DOWNLOAD = "Download as CSV"
 FASTA_DOWNLOAD = "Download sequences as a fasta file"
-TARGET_AREA_PREFIX = "Targetarea"
+TARGET_AREA_PREFIX = "Assay_Design_Area_"
 
 # Streamlit app header
 st.header("Find Assay Target Area")
