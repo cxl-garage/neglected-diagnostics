@@ -56,7 +56,7 @@ with off_target_container:
     )
 
 st.divider()
-
+cols = AssayTargetColumns()
 # Create a container for target area parameters
 target_area_container = st.container()
 with target_area_container:
@@ -110,7 +110,7 @@ with target_area_container:
         if submitted:
             # Find the target area
             try:
-                st.session_state[TGT_AREA_DF] = find_target_area(
+                df = find_target_area(
                     target_files=target_files,
                     off_target_files=off_target_files,
                     reference_sequence=reference_sequence,
@@ -119,6 +119,9 @@ with target_area_container:
                     maxDif_t=max_differenc_o,
                     maxDif_ot=max_difference_ot,
                 )
+                target_id_col = df.index.map(lambda i: f"{TARGET_AREA_PREFIX}{i+1}")
+                df.insert(loc=0, column=cols.target_id, value=target_id_col)
+                st.session_state[TGT_AREA_DF] = df
                 st.session_state[TGT_AREA_FORM] = True
             except ValueError as e:
                 # Handle the case where an error occurs during target area calculation
@@ -132,11 +135,12 @@ if st.session_state[TGT_AREA_FORM]:
     # Dropdown menu for selecting download format
     download_format = st.selectbox("Select an option:", [CSV_DOWNLOAD, FASTA_DOWNLOAD])
 
+    df = st.session_state[TGT_AREA_DF]
     if download_format == CSV_DOWNLOAD:
         # Option 1: Download the entire DataFrame as CSV
         st.download_button(
             label="Download",
-            data=st.session_state[TGT_AREA_DF].to_csv(index=False).encode("utf-8"),
+            data=df.to_csv(index=False).encode("utf-8"),
             file_name="potential_target_area.csv",
             mime="text/csv",
             key="csv_button",
@@ -146,12 +150,9 @@ if st.session_state[TGT_AREA_FORM]:
 
     elif download_format == FASTA_DOWNLOAD:
         # Option 2: Download sequences as a FASTA file
-        cols = AssayTargetColumns()
-        df = st.session_state[TGT_AREA_DF]
         seqs = df[cols.assay_design_area].tolist()
-        fasta_data = "\n".join(
-            [f"{TARGET_AREA_PREFIX}{i+1}\n{seq}" for i, seq in enumerate(seqs)]
-        )
+        target_ids = df[cols.target_id].tolist()
+        fasta_data = "\n".join([f"{id}\n{seq}" for id, seq in zip(target_ids, seqs)])
         st.download_button(
             label="Download Fasta",
             data=fasta_data,
