@@ -16,7 +16,7 @@ Step 2B:
 Optional - Characterize inter and intra-species or strain variation to inform primer site locations.  
 ***Sequence Variability*** can be used to generate a table that lists all positions where variation exists across sequences.  
 Step 3: 
-Design primers using the target area candidates.  
+Design primers using the design area candidates.  
 
 ### Sequence Input
 This tool integrates with [GenBank](https://www.ncbi.nlm.nih.gov/nucleotide/) and can search for sequences from the nucleotide database (more databases coming soon). Search terms can be general (e.g. cougar mitochondrial) or can be more specific using the NCBI [Search field descriptions](https://www.ncbi.nlm.nih.gov/books/NBK49540/).  

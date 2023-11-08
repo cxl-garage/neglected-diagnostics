@@ -60,7 +60,7 @@ cols = AssayTargetColumns()
 # Create a container for target area parameters
 target_area_container = st.container()
 with target_area_container:
-    st.subheader("Target Area Parameters")
+    st.subheader("Design Area Parameters")
     with st.form("find_target_area"):
         # Input field for selecting Reference sequence, Target region Size, Target region Slide size, and Maximum
         # allowed differences between primers and targets
