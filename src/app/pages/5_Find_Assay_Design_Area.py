@@ -21,10 +21,10 @@ FASTA_DOWNLOAD = "Download sequences as a fasta file"
 TARGET_AREA_PREFIX = "Assay_Design_Area_"
 
 # Streamlit app header
-st.header("Find Assay Target Area")
+st.header("Find Assay Design Area")
 
 st.markdown(NAVIGATE_WARNING_MD)
-render_markdown("src/app/find_assay_target_guide.md")
+render_markdown("src/app/find_assay_design_guide.md")
 
 # Create a container for uploading target sequences
 target_container = st.container()
@@ -72,7 +72,7 @@ with target_area_container:
         )
 
         tgt_region_size = st.number_input(
-            label="Enter the target region size (# of base pairs)",
+            label="Enter the assay design region size (# of base pairs)",
             min_value=60,
             value=300,
             step=1,
@@ -80,7 +80,7 @@ with target_area_container:
         )
 
         slide_size = st.number_input(
-            label="Enter the target region slide size (# of base pairs)",
+            label="Enter the assay design region slide size (# of base pairs)",
             min_value=0,
             value=20,
             step=1,
@@ -88,7 +88,7 @@ with target_area_container:
         )
 
         max_differenc_o = st.number_input(
-            label="Enter the maximum differences allowed between primer and target sequences",
+            label="Enter the maximum differences allowed between assay area and target sequences",
             min_value=0,
             value=5,
             step=1,
@@ -97,7 +97,7 @@ with target_area_container:
         )
 
         max_difference_ot = st.number_input(
-            label="Enter the maximum differences allowed between primer and off-target sequences",
+            label="Enter the maximum differences allowed between assay area and off-target sequences",
             min_value=10,
             value=30,
             step=1,
@@ -106,7 +106,7 @@ with target_area_container:
         )
 
         # Button to trigger target area calculation
-        submitted = st.form_submit_button("Find Target Area")
+        submitted = st.form_submit_button("Find Assay Design Area")
         if submitted:
             # Find the target area
             try:

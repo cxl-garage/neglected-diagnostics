@@ -32,7 +32,7 @@ FASTA_DOWNLOAD = "Download sequences as a fasta file"
 # Divides the page layout into two columns of relative width
 query_col, summary_col = st.columns(MAIN_PAGE_COLS_SIZE, gap=MAIN_PAGE_COLS_GAP)
 with query_col:
-    st.header("Neglected Diagnostics: Democratizing Genetic Testing!")
+    st.header("Search and Retrieve Sequences")
     st.markdown(NAVIGATE_WARNING_MD)
     render_markdown("src/app/sequence_search_quick_guide.md")
     # Streamlit form to capture search conditions

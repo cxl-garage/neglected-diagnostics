@@ -11,7 +11,7 @@ Use a sequence visualization and alignment software to screen the sequences for 
 ***Sequence Haplotypes*** can be used to collapse sequences into groups based on patterns of variability.  
 Step 2: 
 Compare target and off-target sequences to identify top candidates for designing primers.  
-***Find Assay Target Area*** can identify sections of the sequence data where target sequences are most similar to each other, but most different from off-target sequences.  
+***Find Assay Design Area*** can identify sections of the sequence data where target sequences are most similar to each other, but most different from off-target sequences.  
 Step 2B: 
 Optional - Characterize inter and intra-species or strain variation to inform primer site locations.  
 ***Sequence Variability*** can be used to generate a table that lists all positions where variation exists across sequences.  
@@ -28,13 +28,13 @@ This tool analyzes aligned multiple sequence fasta files and collapses them into
 ### Sequence Variability
 This tool analyzes aligned multiple sequence fasta files to generate a variability table of base pair composition along all positions. A threshold can be set to only show positions where variability is below a certain percentage - for example a threshold of 99 would exclude all positions where there is a 100% consensus across all sequences. Gaps are not scored as differences and are ignored by the algorithm.   
 
-### Find Assay Target Area
+### Find Assay Design Area
 This tool analyzes a set of sequences labeled as Target (sequences that the diagnostic assay should detect) against a set of sequences labeled as Off-Target (sequences that the diagnostic assay should NOT detect) to identify areas where targets are conserved but dissimilar to the off-targets. This comparison is done along the entire length of the reference target sequence by splitting up the pairwise comparison into smaller windows that slide along the sequences. Further details on this algorithm can be found [here](https://github.com/kmceres/Thylacine_Design/tree/main/general_primer_design).  
 
 ### Download Locally
 [Instructions](https://github.com/uw-ssec/neglected-diagnostics/blob/main/CONTRIBUTING.md)
 
 ### Example files
-coming soon
+[Example files](https://github.com/uw-ssec/neglected-diagnostics/blob/main/data/)
 
 Powered by Conservation X Labs and the University of Washington Scientific Software Engineering Center at the eScience Institute.
