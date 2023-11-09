@@ -152,7 +152,7 @@ if st.session_state[TGT_AREA_FORM]:
         # Option 2: Download sequences as a FASTA file
         seqs = df[cols.assay_design_area].tolist()
         target_ids = df[cols.target_id].tolist()
-        fasta_data = "\n".join([f"{id}\n{seq}" for id, seq in zip(target_ids, seqs)])
+        fasta_data = "\n".join([f">{id}\n{seq}" for id, seq in zip(target_ids, seqs)])
         st.download_button(
             label="Download Fasta",
             data=fasta_data,
