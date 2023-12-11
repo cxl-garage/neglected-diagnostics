@@ -82,7 +82,8 @@ def iter_window(ref, window, slide_ind, aln, aln_l):
     j = 0
     seq_l = []
     while j < len(ref) - window:
-        primer_seq = ref[j : j + window]
+        startIdx = j + 1
+        primer_seq = (ref[j : j + window], startIdx)
         new_primer = detect_exact_seqs(primer_seq, aln_l, aln)
         seq_l.append(new_primer)
         j = j + slide_ind
@@ -98,10 +99,10 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
     off_snps = []  # avg hamming distance primer-off
     if len(seq_l) > 0:
         for i in range(len(seq_l)):
-            primer_seq = seq_l[i].primer_seq
-            new_target = calc_nuc_dif(primer_seq, aln_l, aln, maxDif_t)
-            new_off_target = calc_nuc_dif(primer_seq, off, aln, maxDif_ot)
-            primers_l.append(primer_seq)
+            primer_seqContent = seq_l[i].primer_seq[0]
+            new_target = calc_nuc_dif(primer_seqContent, aln_l, aln, maxDif_t)
+            new_off_target = calc_nuc_dif(primer_seqContent, off, aln, maxDif_ot)
+            primers_l.append(seq_l[i].primer_seq)
             matches.append((seq_l[i].n_match / len(aln_l)) * 100)
             target_snps.append(new_target.mean_score)
             target_snps_bpwise.append(new_target.bpwise_score)
@@ -109,11 +110,17 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
     return (primers_l, target_snps, target_snps_bpwise, matches, off_snps)
 
 
-def write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps):
+def write_out(ref, primers_l, target_snps, target_snps_bpwise, matches, off_snps):
+    primers_l_seqContent = [i[0] for i in primers_l]
+    primers_l_startIndex = [i[1] for i in primers_l]
+    primers_l_endIndex = [i[1] + len(i[0]) - 1 for i in primers_l]
     cols = AssayTargetColumns()
     df = pd.DataFrame(
         {
-            cols.assay_design_area: primers_l,
+            cols.assay_design_area: primers_l_seqContent,
+            cols.assay_design_area_start: primers_l_startIndex,
+            cols.assay_design_area_end: primers_l_endIndex,
+            cols.assay_design_area_reference: ref,
             cols.perc_tgt_match: matches,
             cols.ratio_tgt_mismatch: target_snps,
             cols.bpwise_error_percentage_tgt_mismatch: target_snps_bpwise,
@@ -143,10 +150,11 @@ def write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps):
 
 def detect_exact_seqs(primer_seq, aln_l, aln):
     window_l = []
+    primer_seqContent = primer_seq[0]
     for i in range(len(aln_l)):
         seq2n = aln_l[i]
         s2 = aln[seq2n]
-        if re.search(primer_seq, s2):
+        if re.search(primer_seqContent, s2):
             window_l.append(seq2n)
     le = len(window_l)
     new_match = exact_match_primer(primer_seq, window_l, le)
@@ -202,6 +210,6 @@ def find_target_area(
     ) = detect_fuzzy_matches(
         seq_l, aln_l, off, aln, maxDif_t=maxDif_t, maxDif_ot=maxDif_ot
     )
-    df = write_out(primers_l, target_snps, target_snps_bpwise, matches, off_snps)
+    df = write_out(ref, primers_l, target_snps, target_snps_bpwise, matches, off_snps)
 
     return df
