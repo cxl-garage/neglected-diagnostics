@@ -7,4 +7,7 @@
 5. Type the species or target name that will be added as a header to each sequence variability group into the [Enter the species name:] box.  
     b. Click the [Add filters] check box to display a second table where more sophisticated filters can be applied to the search results. Choose one or more options from the [Filter results table] dropdown to select which column(s) to apply a filter. Type, or select the filter value(s) for each column in the appropriate box.
 6. Click on [Prepare Download].   
-7. Click on [Download FASTA file].  
+7. Click on [Download FASTA file]. 
+
+### Community Tools
+[SequenceTracer](http://localhost:8085/EntropyCalcWeb-1.0-SNAPSHOT/sequences;)
