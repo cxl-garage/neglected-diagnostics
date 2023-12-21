@@ -64,12 +64,7 @@ def calcInformativeSeqs(result) -> list:
     )
 
     # Sort groups by priority, then by length of sequences
-    result.groups.sort(
-        key=lambda g: g.get_priority() * 1e10
-        - g.get_priority() * 1e10
-        + len(g.sequences)
-        - len(g.sequences)
-    )
+    result.groups.sort()
 
     informative_seqs = []
 
@@ -94,7 +89,7 @@ def calcInformativeSeqs(result) -> list:
 def exportCompressSeqs(result):
     resultText = ""
     for g in result.groups:
-        resultText += f">Group-{g.name}|frequency-{round(g.probability, 3)}%\r\n{g.sequences[0].data}\r\n"
+        resultText += f">Group-{g.name}|frequency-{round(g.probability, 3)}%\n{g.sequences[0].data}"
 
     # export to 'compressed.txt'
     with open("compressed.txt", "w") as f:
@@ -104,7 +99,7 @@ def exportCompressSeqs(result):
 def export(seqs, outFile="export.txt"):
     resultText = ""
     for s in seqs:
-        resultText += f"{s.meta}{s.data}\n"
+        resultText += f"{s.meta}{s.data}"
 
     # export to outFile
     with open(outFile, "w") as f:

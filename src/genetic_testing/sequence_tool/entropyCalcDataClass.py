@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from enum import Enum
 
-import Apfloat
+# import Apfloat
 
 logger = logging.getLogger(__name__)
 
@@ -159,6 +159,11 @@ class GroupedSequence:
         self.fred = 0.0
         self.color = "red"
 
+    def __lt__(self, other):
+        if self.get_priority() != other.get_priority():
+            return self.get_priority() < other.get_priority()
+        return len(other.get_sequences()) < len(self.get_sequences())
+
     def get_sequences(self):
         return self.sequences
 
@@ -175,11 +180,6 @@ class GroupedSequence:
         if self.is_empty():
             return None
         return self.sequences[0].get_data()
-
-    def compare_to(self, other):
-        if self.get_priority() != other.get_priority():
-            return self.get_priority() - other.get_priority()
-        return len(other.get_sequences()) - len(self.get_sequences())
 
 
 class DataParser(ABC):
@@ -394,99 +394,99 @@ class PositionCalculation(ABC):
         pass
 
 
-class ApfloatPositionCalculation(threading.Thread):
-    def __init__(self, pos, a, g, c, u, gap, precision):
-        super().__init__()
-        self.position = pos
-        self.a = a
-        self.g = g
-        self.c = c
-        self.u = u
-        self.gap = gap
-        self.precision = precision
-        self.ok = False
+# class ApfloatPositionCalculation(threading.Thread):
+#     def __init__(self, pos, a, g, c, u, gap, precision):
+#         super().__init__()
+#         self.position = pos
+#         self.a = a
+#         self.g = g
+#         self.c = c
+#         self.u = u
+#         self.gap = gap
+#         self.precision = precision
+#         self.ok = False
 
-        self.Afreq = None
-        self.Gfreq = None
-        self.Cfreq = None
-        self.Ufreq = None
-        self.lnAfreq = None
-        self.lnGfreq = None
-        self.lnCfreq = None
-        self.lnUfreq = None
-        self.AEntropy = None
-        self.GEntropy = None
-        self.CEntropy = None
-        self.UEntropy = None
-        self.entropy = None
+#         self.Afreq = None
+#         self.Gfreq = None
+#         self.Cfreq = None
+#         self.Ufreq = None
+#         self.lnAfreq = None
+#         self.lnGfreq = None
+#         self.lnCfreq = None
+#         self.lnUfreq = None
+#         self.AEntropy = None
+#         self.GEntropy = None
+#         self.CEntropy = None
+#         self.UEntropy = None
+#         self.entropy = None
 
-    def run(self):
-        try:
-            sumApf = Apfloat(self.a + self.g + self.c + self.u, self.precision)
+#     def run(self):
+#         try:
+#             sumApf = Apfloat(self.a + self.g + self.c + self.u, self.precision)
 
-            self.Afreq = Apfloat(self.a, self.precision) / sumApf
-            self.Gfreq = Apfloat(self.g, self.precision) / sumApf
-            self.Cfreq = Apfloat(self.c, self.precision) / sumApf
-            self.Ufreq = Apfloat(self.u, self.precision) / sumApf
-            self.lnAfreq = self.log(self.Afreq)
-            self.lnGfreq = self.log(self.Gfreq)
-            self.lnCfreq = self.log(self.Cfreq)
-            self.lnUfreq = self.log(self.Ufreq)
-            self.AEntropy = self.Afreq * self.lnAfreq * -1
-            self.GEntropy = self.Gfreq * self.lnGfreq * -1
-            self.CEntropy = self.Cfreq * self.lnCfreq * -1
-            self.UEntropy = self.Ufreq * self.lnUfreq * -1
-            self.entropy = self.AEntropy + self.GEntropy + self.CEntropy + self.UEntropy
-        except Exception as e:
-            print(f"Position {self.position} calculation error, reason: {str(e)}")
-            return False
-        self.ok = True
-        return True
+#             self.Afreq = Apfloat(self.a, self.precision) / sumApf
+#             self.Gfreq = Apfloat(self.g, self.precision) / sumApf
+#             self.Cfreq = Apfloat(self.c, self.precision) / sumApf
+#             self.Ufreq = Apfloat(self.u, self.precision) / sumApf
+#             self.lnAfreq = self.log(self.Afreq)
+#             self.lnGfreq = self.log(self.Gfreq)
+#             self.lnCfreq = self.log(self.Cfreq)
+#             self.lnUfreq = self.log(self.Ufreq)
+#             self.AEntropy = self.Afreq * self.lnAfreq * -1
+#             self.GEntropy = self.Gfreq * self.lnGfreq * -1
+#             self.CEntropy = self.Cfreq * self.lnCfreq * -1
+#             self.UEntropy = self.Ufreq * self.lnUfreq * -1
+#             self.entropy = self.AEntropy + self.GEntropy + self.CEntropy + self.UEntropy
+#         except Exception as e:
+#             print(f"Position {self.position} calculation error, reason: {str(e)}")
+#             return False
+#         self.ok = True
+#         return True
 
-    def log(self, x):
-        if x == Apfloat(0, self.precision):
-            return Apfloat(0, self.precision)
+#     def log(self, x):
+#         if x == Apfloat(0, self.precision):
+#             return Apfloat(0, self.precision)
 
-        return Apfloat.ln(x)
+#         return Apfloat.ln(x)
 
-    def get_Afreq(self):
-        return float(self.Afreq)
+#     def get_Afreq(self):
+#         return float(self.Afreq)
 
-    def get_Gfreq(self):
-        return float(self.Gfreq)
+#     def get_Gfreq(self):
+#         return float(self.Gfreq)
 
-    def get_Cfreq(self):
-        return float(self.Cfreq)
+#     def get_Cfreq(self):
+#         return float(self.Cfreq)
 
-    def get_Ufreq(self):
-        return float(self.Ufreq)
+#     def get_Ufreq(self):
+#         return float(self.Ufreq)
 
-    def get_LnAfreq(self):
-        return float(self.lnAfreq)
+#     def get_LnAfreq(self):
+#         return float(self.lnAfreq)
 
-    def get_LnGfreq(self):
-        return float(self.lnGfreq)
+#     def get_LnGfreq(self):
+#         return float(self.lnGfreq)
 
-    def get_LnCfreq(self):
-        return float(self.lnCfreq)
+#     def get_LnCfreq(self):
+#         return float(self.lnCfreq)
 
-    def get_LnUfreq(self):
-        return float(self.lnUfreq)
+#     def get_LnUfreq(self):
+#         return float(self.lnUfreq)
 
-    def get_AEntropy(self):
-        return float(self.AEntropy)
+#     def get_AEntropy(self):
+#         return float(self.AEntropy)
 
-    def get_GEntropy(self):
-        return float(self.GEntropy)
+#     def get_GEntropy(self):
+#         return float(self.GEntropy)
 
-    def get_CEntropy(self):
-        return float(self.CEntropy)
+#     def get_CEntropy(self):
+#         return float(self.CEntropy)
 
-    def get_UEntropy(self):
-        return float(self.UEntropy)
+#     def get_UEntropy(self):
+#         return float(self.UEntropy)
 
-    def get_entropy(self):
-        return float(self.entropy)
+#     def get_entropy(self):
+#         return float(self.entropy)
 
 
 class DoublePositionCalculation(PositionCalculation):

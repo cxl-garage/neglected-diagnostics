@@ -1,7 +1,5 @@
 import os
-import re
 import subprocess
-import sys
 
 import pandas as pd
 
@@ -11,6 +9,7 @@ outdir = os.getcwd()
 # wrap consensus sequence to a class, with methods to identify consensus sequence, calculate consensus score and to get ideal consensus regions
 class ConsensusSeq:
     def __init__(self, multifasta):
+        self.infile = multifasta
         self.consensus_dict = {}
         self.consensus_seq = ""
         self.consensus_score = []
@@ -60,6 +59,14 @@ class ConsensusSeq:
         for gene in self.fasta:
             fasta_for_panda[gene] = list(self.fasta[gene])
         self.fasta_pd = pd.DataFrame.from_dict(fasta_for_panda, orient="index")
+
+    def align(self, outfile):
+        with open(outfile, "w") as outfile:
+            subprocess.call(
+                ["mafft", "--auto", "--adjustdirection", "--thread -1", self.infile],
+                stdout=outfile,
+                stderr=subprocess.DEVNULL,
+            )
 
     def compute_consensus_sequence(self):
         self.compute_consensus_score()
