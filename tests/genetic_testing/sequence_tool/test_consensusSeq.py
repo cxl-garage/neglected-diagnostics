@@ -1,8 +1,10 @@
+from io import BytesIO
+
 import pandas as pd
 import pytest
 
 # test script to test the functionality of consensusSeq.py
-from genetic_testing.sequence_tool.consensusSeq import ConsensusSeq
+from genetic_testing.sequence_tool.consensusSeq import ConsensusSeq, alignMs
 
 MULTIFASTA = "multifasta"
 EXPECTED_RESULT = "expected_result"
@@ -11,13 +13,18 @@ EXPECTED_RESULT = "expected_result"
 EXPECTED_RESULTS = {}
 
 # define test data
+# inFile = "Sei whale_CytB_unaligned"
 inFile = "Sei whale_CytB_unaligned"
+
 # test data for reading fasta file
 consensusSeq_test_data = f"./tests/genetic_testing/sequence_tool/{inFile}.fasta"
-testConsensusSeq = ConsensusSeq(consensusSeq_test_data)
+with open(consensusSeq_test_data, "rb") as file:
+    sequences = BytesIO(file.read())
+
+# testConsensusSeq = ConsensusSeq(sequences)
 
 # test data for alignment calculation
-testConsensusSeq.align(f"./tests/genetic_testing/sequence_tool/{inFile}_aligned.fasta")
+print(alignMs(sequences))
 
 # # test data for consensus score calculation
 # testConsensusSeq.compute_consensus_sequence()

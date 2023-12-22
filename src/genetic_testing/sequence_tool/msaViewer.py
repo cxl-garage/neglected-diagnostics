@@ -1,12 +1,14 @@
 import threading
+from io import StringIO
 
 import dash_bio as dashbio
 from dash import Dash, html
 
 
-def sequence_viewer(sequences):
+def sequence_viewer(fasta_file):
     app = Dash(__name__)
-    data = sequences.decode("utf-8")
+    stringio = StringIO(fasta_file.getvalue().decode("utf-8"))
+    data = stringio.read()
     print(type(data))
     app.layout = html.Div(
         [
@@ -20,6 +22,6 @@ def sequence_viewer(sequences):
     app.run_server(debug=False)
 
 
-def start_sequence_viewer(sequences):
-    t1 = threading.Thread(target=sequence_viewer, args=(sequences,))
+def start_sequence_viewer(fasta_file):
+    t1 = threading.Thread(target=sequence_viewer, args=(fasta_file,))
     t1.start()

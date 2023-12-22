@@ -60,6 +60,7 @@ if st.session_state[SEQVAR_DF] is not None:
     species = st.text_input("Enter the species name:")
 
     if st.button("Prepare for download"):
+        print(st.session_state[SEQVAR_DF])
         download_seq_var_data(st.session_state[SEQVAR_DF], species)
 else:
     st.write("No sequence variability data to download")

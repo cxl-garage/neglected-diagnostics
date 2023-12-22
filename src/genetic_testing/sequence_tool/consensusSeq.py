@@ -1,14 +1,43 @@
 import os
+import shutil
 import subprocess
+from io import BytesIO, StringIO
 
 import pandas as pd
 
+from app.common.data_processing import read_fasta
+from genetic_testing.sequence_analysis.datatypes import MultiSequenceAlginmentColumns
+
 outdir = os.getcwd()
+
+
+def alignMs(file):
+    tempFile = "temp.fasta"
+    with open(tempFile, "wb") as f:
+        f.write(file.read())
+    # seqs = StringIO(file.getvalue().decode("utf-8")).read()
+    # print(file.name)
+    proc = subprocess.Popen(
+        ["mafft", "--auto", "--quiet", "--thread", "4", tempFile],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+
+    bytesSteam = BytesIO(proc.stdout.read())
+    os.remove(tempFile)
+
+    alignedSeqences = read_fasta(bytesSteam)
+    cols = MultiSequenceAlginmentColumns()
+    alignedSeqences_pd = pd.DataFrame(
+        alignedSeqences.items(), columns=[cols.id, cols.seq]
+    )
+    return alignedSeqences_pd
 
 
 # wrap consensus sequence to a class, with methods to identify consensus sequence, calculate consensus score and to get ideal consensus regions
 class ConsensusSeq:
     def __init__(self, multifasta):
+        self.stringio = StringIO(multifasta.getvalue().decode("utf-8"))
         self.infile = multifasta
         self.consensus_dict = {}
         self.consensus_seq = ""
@@ -20,37 +49,39 @@ class ConsensusSeq:
         self.consensus_flag_inverted = []
         self.fasta = {}
         self.fastaheader = {}
-        self.fasta, self.fastaheader = self.read_fasta(multifasta)
+        self.fasta, self.fastaheader = self.read_fasta()
         self.number_of_sequences = len(self.fasta)
         self.fasta_pd = None
         self.fasta_to_panda()
-        # self.compute_consensus_sequence()
-        # self.compute_consensus_score()
-        # self.compute_consensus_seq_gapless()
-        # self.compute_consensus_regions()
+        self.compute_consensus_sequence()
+        self.compute_consensus_seq_gapless()
+        self.compute_consensus_regions()
 
-    def read_fasta(self, multifasta, delim="\t", idpos=0):
+    def read_fasta(self, delim="\t", idpos=0):
         """reading input fasta file
         returns fasta dictionary with key=accessionNumber and value=Sequence
         returns fastaheader dictionary with key=accesstionNumber and value=originalFastaHeader
         """
+
         fasta = {}
         fastaheader = {}
-        with open(multifasta, "r") as infile:
-            acNumber = ""
-            for line in infile:
-                if line.startswith(">"):
-                    if delim:
-                        acNumber = line.split(delim)[idpos].strip().strip(">")
-                        fastaheader[acNumber] = line.strip()
-                    else:
-                        acNumber = line.split()[idpos].strip().strip(">")
-                        fastaheader[acNumber] = line.strip()
+        infile = self.stringio.readlines()
+
+        acNumber = ""
+
+        for line in infile:
+            if line.startswith(">"):
+                if delim:
+                    acNumber = line.split(delim)[idpos].strip().strip(">")
+                    fastaheader[acNumber] = line.strip()
                 else:
-                    if acNumber in fasta:
-                        fasta[acNumber] += line.strip().upper()
-                    else:
-                        fasta[acNumber] = line.strip().upper()
+                    acNumber = line.split()[idpos].strip().strip(">")
+                    fastaheader[acNumber] = line.strip()
+            else:
+                if acNumber in fasta:
+                    fasta[acNumber] += line.strip().upper()
+                else:
+                    fasta[acNumber] = line.strip().upper()
         return fasta, fastaheader
 
     def fasta_to_panda(self):
@@ -59,14 +90,6 @@ class ConsensusSeq:
         for gene in self.fasta:
             fasta_for_panda[gene] = list(self.fasta[gene])
         self.fasta_pd = pd.DataFrame.from_dict(fasta_for_panda, orient="index")
-
-    def align(self, outfile):
-        with open(outfile, "w") as outfile:
-            subprocess.call(
-                ["mafft", "--auto", "--adjustdirection", "--thread -1", self.infile],
-                stdout=outfile,
-                stderr=subprocess.DEVNULL,
-            )
 
     def compute_consensus_sequence(self):
         self.compute_consensus_score()

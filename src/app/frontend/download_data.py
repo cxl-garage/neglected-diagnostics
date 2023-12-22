@@ -3,7 +3,7 @@ from typing import List
 import pandas as pd
 import streamlit as st
 
-from app.common.data_processing import seqvar_df_to_fasta
+from app.common.data_processing import msa_df_to_fasta, seqvar_df_to_fasta
 from genetic_testing.routers import ncbi
 
 
@@ -68,4 +68,30 @@ def download_seq_var_data(df: pd.DataFrame, species: str) -> None:
         label="Download FASTA file",
         data=fasta_str,
         file_name=f"sequence_haplotypes_{species}.fasta",
+    )
+
+
+def download_msa_data(df: pd.DataFrame, species: str) -> None:
+    """Downloads multisequence alignment data as a FASTA file.
+    This function converts a DataFrame containing multisequence alignment data to
+    FASTA format and provides the option to
+    download the resulting FASTA file.
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A DataFrame containing sequence variability data.
+    species : str
+        The name of the species for which the data is being processed.
+    """
+
+    # Convert the DataFrame to FASTA format string
+    fasta_str = msa_df_to_fasta(df, species)
+    st.write(
+        "FASTA file is ready for download. Please click the button below to proceed."
+    )
+    # Display a download button
+    st.download_button(
+        label="Download FASTA file",
+        data=fasta_str,
+        file_name=f"{species}_aligned.fasta",
     )

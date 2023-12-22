@@ -6,7 +6,10 @@ import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
 from app.common.constants import NCBI_DF
-from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns
+from genetic_testing.sequence_analysis.datatypes import (
+    GroupSequenceColumns,
+    MultiSequenceAlginmentColumns,
+)
 
 
 def format_ncbi_summary() -> None:
@@ -158,4 +161,30 @@ def seqvar_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
         fasta_str.append(f">Group{group_number}_{species}_{count}\n{sequence}")
 
     return "\n".join(fasta_str)
+
+
+def msa_df_to_fasta(df: pd.DataFrame, species: str = "species") -> str:
+    """Convert a multisequence alignment DataFrame to FASTA format string.
+
+    Parameters
+    ----------
+    df : pd.DataFrame
+        A DataFrame containing sequence variability data. It is expected to have `Header`, `Sequence` columns.
+
+    species : str, optional
+        The name of the species, by default `species`.
+
+    Returns
+    -------
+    str
+        A string containing the multisequence alignment data in FASTA format.
+    """
+    cols = MultiSequenceAlginmentColumns()
+    fasta_str = []
+    for _, row in df.iterrows():
+        sequenceID = row[cols.id]
+        sequence = row[cols.seq]
+
+        fasta_str.append(f">{sequenceID}\n{sequence}")
+
     return "\n".join(fasta_str)
