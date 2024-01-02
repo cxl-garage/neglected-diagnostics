@@ -18,6 +18,7 @@ TGT_AREA_DF = "TGT_AREA_DF"
 # Session State Keys for Multisequence Alignment page
 MSA_FORM = "MSA_FORM"
 MSA_DF = "MSA_DF"
+MSA_VIEWER = "MSA_VIEWER"
 
 # Streamlit UI
 PAGE_LAYOUT = "wide"
