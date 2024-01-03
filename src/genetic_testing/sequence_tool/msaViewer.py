@@ -1,12 +1,11 @@
-import multiprocessing
-import signal
+import os
+import shutil
 import subprocess
 import threading
 from io import StringIO
 
 import dash_bio as dashbio
 from dash import Dash, html
-from flask import Flask
 
 
 def sequence_viewer(fasta_file, app):
@@ -25,6 +24,42 @@ def sequence_viewer(fasta_file, app):
     app.run(debug=False, use_reloader=False)
 
 
+def make_archive(source, destination):
+    base = os.path.basename(destination)
+    name = base.split(".")[0]
+    format = base.split(".")[1]
+    archive_from = os.path.dirname(source)
+    archive_to = os.path.basename(source.strip(os.sep))
+    shutil.make_archive(name, format, archive_from, archive_to)
+    shutil.move("%s.%s" % (name, format), destination)
+
+
+def msa_cleaner(file):
+    filename = file.name.split(".")[0]
+    zipFileName = filename + "_cleaned.zip"
+    tempFile = "temp.fasta"
+    outDirName = "msa_cleaner_out"
+    outdir = os.path.join(os.getcwd(), outDirName)
+    if not os.path.exists(outdir):
+        os.mkdir(outdir)
+    outFile = os.path.join(outdir, filename)
+
+    with open(tempFile, "wb") as f:
+        f.write(file.read())
+
+    proc = subprocess.Popen(
+        ["CIAlign", "--infile", tempFile, "--outfile_stem", outFile, "--all"],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.DEVNULL,
+    )
+    print(proc.stdout.read())
+    os.remove(tempFile)
+    zipPath = os.path.join(os.getcwd(), zipFileName)
+    make_archive(outdir, zipPath)
+    shutil.rmtree(outdir)
+    return zipPath
+
+
 class MsaViewer(threading.Thread):
     def __init__(self, fasta_file):
         super().__init__()
@@ -38,6 +73,9 @@ class MsaViewer(threading.Thread):
             ),
         )
         self.event = threading.Event()
+
+    def run(self):
+        self.viewerThread.start()
 
     def updateData(self, fasta_file):
         self.fasta_file = fasta_file

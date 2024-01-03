@@ -22,6 +22,7 @@ dependencies = [
     "fuzzysearch>=0.7.3",
     "streamlit-aggrid>=0.3.4",
     "dash-bio",
+    "cialign"
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)

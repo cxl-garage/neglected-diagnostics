@@ -105,7 +105,9 @@ def read_fasta(file: BytesIO) -> Dict[str, str]:
                 current_header = line[1:].decode("utf-8")  # Decode bytes to string
                 current_sequence = []  # Reset sequence list
             else:
-                current_sequence.append(line.decode("utf-8"))  # Decode bytes to str
+                current_sequence.append(
+                    line.decode("utf-8").upper()
+                )  # Decode bytes to str
 
         if current_header is not None:  # Store the last sequence
             sequences[current_header] = "".join(current_sequence)

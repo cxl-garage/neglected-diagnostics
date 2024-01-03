@@ -52,7 +52,7 @@ with st.form("seq_haplotypes"):
 
 
 # Display the sequence variability data
-if st.session_state[SEQVAR_DF] is not None:
+if not st.session_state[SEQVAR_DF].empty:
     st.write("Sequence Variability Data:")
     st.dataframe(st.session_state[SEQVAR_DF])
 
@@ -60,7 +60,6 @@ if st.session_state[SEQVAR_DF] is not None:
     species = st.text_input("Enter the species name:")
 
     if st.button("Prepare for download"):
-        print(st.session_state[SEQVAR_DF])
         download_seq_var_data(st.session_state[SEQVAR_DF], species)
 else:
     st.write("No sequence variability data to download")

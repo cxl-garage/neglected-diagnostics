@@ -8,8 +8,6 @@ import pandas as pd
 from app.common.data_processing import read_fasta
 from genetic_testing.sequence_analysis.datatypes import MultiSequenceAlginmentColumns
 
-outdir = os.getcwd()
-
 
 def alignMs(file):
     tempFile = "temp.fasta"
