@@ -1,3 +1,4 @@
+import configparser
 import os
 import shutil
 import subprocess
@@ -34,10 +35,11 @@ def make_archive(source, destination):
     shutil.move("%s.%s" % (name, format), destination)
 
 
-def msa_cleaner(file):
+def msa_cleaner(file, config):
     filename = file.name.split(".")[0]
     zipFileName = filename + "_cleaned.zip"
     tempFile = "temp.fasta"
+    tempConfig = "temp.ini"
     outDirName = "msa_cleaner_out"
     outdir = os.path.join(os.getcwd(), outDirName)
     if not os.path.exists(outdir):
@@ -47,13 +49,34 @@ def msa_cleaner(file):
     with open(tempFile, "wb") as f:
         f.write(file.read())
 
+    configPath = os.path.join(os.getcwd(), "static/msa_cleaner_default.ini")
+    shutil.copyfile(configPath, tempConfig)
+    actConfig = configparser.ConfigParser()
+    actConfig.read(tempConfig)
+    for section in config.sections():
+        for option in config.options(section):
+            if option in actConfig[section]:
+                actConfig[section][option] = config[section][option]
+
+    with open(tempConfig, "w") as f:
+        actConfig.write(f)
+
     proc = subprocess.Popen(
-        ["CIAlign", "--infile", tempFile, "--outfile_stem", outFile, "--all"],
+        [
+            "CIAlign",
+            "--inifile",
+            tempConfig,
+            "--infile",
+            tempFile,
+            "--outfile_stem",
+            outFile,
+        ],
         stdout=subprocess.PIPE,
         stderr=subprocess.DEVNULL,
     )
     print(proc.stdout.read())
     os.remove(tempFile)
+    os.remove(tempConfig)
     zipPath = os.path.join(os.getcwd(), zipFileName)
     make_archive(outdir, zipPath)
     shutil.rmtree(outdir)
