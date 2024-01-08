@@ -56,8 +56,11 @@ with query_col:
                 try:  # if no result is found will go in except block and display error
                     st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
                     data_processing.format_ncbi_summary()
-                except:
-                    logger.info(f"No results found for search query = '{search_term}'")
+                except Exception as e:
+                    logger.warning(
+                        f"No results found for search query = '{search_term}'",
+                        exc_info=e,
+                    )
                     st.error("No results found")
                     st.session_state[NCBI_SUMMARY_FORM] = False
     df_aggrid = pd.DataFrame()
