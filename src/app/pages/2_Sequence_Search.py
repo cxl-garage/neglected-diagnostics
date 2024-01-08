@@ -49,8 +49,12 @@ with query_col:
                 st.error("Please input a search term before you submit")
             else:
                 st.session_state[NCBI_SUMMARY_FORM] = True
-                st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
-                data_processing.format_ncbi_summary()
+                try:  # if no result is found will go in except block and display error
+                    st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
+                    data_processing.format_ncbi_summary()
+                except:
+                    st.error("No results found")
+                    st.session_state[NCBI_SUMMARY_FORM] = False
     df_aggrid = pd.DataFrame()
     if st.session_state[NCBI_SUMMARY_FORM]:
         aggrid_table = aggrid_table()  # Initialize and Render Aggrid Table
