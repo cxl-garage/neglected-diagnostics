@@ -7,6 +7,10 @@ import pandas as pd
 import streamlit as st
 from common.render_method import render_markdown
 
+from utils.log import _init_logger
+
+logger = _init_logger(__name__)
+
 from app.common import data_processing, setup
 from app.common.constants import (
     MAIN_PAGE_COLS_GAP,
@@ -53,6 +57,7 @@ with query_col:
                     st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
                     data_processing.format_ncbi_summary()
                 except:
+                    logger.info(f"No results found for search query = '{search_term}'")
                     st.error("No results found")
                     st.session_state[NCBI_SUMMARY_FORM] = False
     df_aggrid = pd.DataFrame()
