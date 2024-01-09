@@ -7,6 +7,10 @@ import pandas as pd
 import streamlit as st
 from common.render_method import render_markdown
 
+from utils.log import _init_logger
+
+logger = _init_logger(__name__)
+
 from app.common import data_processing, setup
 from app.common.constants import (
     MAIN_PAGE_COLS_GAP,
@@ -49,8 +53,16 @@ with query_col:
                 st.error("Please input a search term before you submit")
             else:
                 st.session_state[NCBI_SUMMARY_FORM] = True
-                st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
-                data_processing.format_ncbi_summary()
+                try:  # if no result is found will go in except block and display error
+                    st.session_state[NCBI_DF] = ncbi.get_data(database, search_term)
+                    data_processing.format_ncbi_summary()
+                except Exception as e:
+                    logger.warning(
+                        f"No results found for search query = '{search_term}'",
+                        exc_info=e,
+                    )
+                    st.error("No results found")
+                    st.session_state[NCBI_SUMMARY_FORM] = False
     df_aggrid = pd.DataFrame()
     if st.session_state[NCBI_SUMMARY_FORM]:
         aggrid_table = aggrid_table()  # Initialize and Render Aggrid Table
