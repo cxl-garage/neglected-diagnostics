@@ -9,7 +9,7 @@ from st_aggrid import (
     GridUpdateMode,
 )
 
-from app.common.constants import NCBI_DF
+from common.constants import NCBI_DF
 
 DEFAULT_COL_DEF = {
     "filter": True,

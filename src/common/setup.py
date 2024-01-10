@@ -1,7 +1,7 @@
 import pandas as pd
 import streamlit as st
 
-from app.common.constants import (
+from common.constants import (
     NCBI_DF,
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,

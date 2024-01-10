@@ -6,7 +6,7 @@ from pandas.api.types import (
     is_numeric_dtype,
 )
 
-from app.common.constants import NCBI_DF_FILTER
+from common.constants import NCBI_DF_FILTER
 
 
 def _preprocessing(df: pd.DataFrame):

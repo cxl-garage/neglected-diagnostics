@@ -5,7 +5,7 @@ import pandas as pd
 import streamlit as st
 from streamlit.runtime.uploaded_file_manager import UploadedFile
 
-from app.common.constants import NCBI_DF
+from common.constants import NCBI_DF
 from genetic_testing.sequence_analysis.datatypes import GroupSequenceColumns
 
 

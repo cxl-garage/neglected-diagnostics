@@ -3,7 +3,7 @@ from typing import List
 import pandas as pd
 import streamlit as st
 
-from app.common.data_processing import seqvar_df_to_fasta
+from common.data_processing import seqvar_df_to_fasta
 from genetic_testing.routers import ncbi
 
 

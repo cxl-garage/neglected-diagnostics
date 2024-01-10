@@ -11,8 +11,8 @@ from utils.log import _init_logger
 
 logger = _init_logger(__name__)
 
-from app.common import data_processing, setup
-from app.common.constants import (
+from common import data_processing, setup
+from common.constants import (
     MAIN_PAGE_COLS_GAP,
     MAIN_PAGE_COLS_SIZE,
     MAX_SEQUENCE_LENGTH_DOWNLOAD,
@@ -22,10 +22,10 @@ from app.common.constants import (
     NCBI_SUMMARY_FORM,
     TOP_N_ORGANISMS,
 )
-from app.frontend.aggrid_table import aggrid_table
-from app.frontend.download_data import download_data
-from app.frontend.filter_dataframe import filter_dataframe
-from app.frontend.filters_info import show_filters_info
+from frontend.aggrid_table import aggrid_table
+from frontend.download_data import download_data
+from frontend.filter_dataframe import filter_dataframe
+from frontend.filters_info import show_filters_info
 from genetic_testing.routers import ncbi
 
 # Initialize the Streamlit session state keys
@@ -38,7 +38,7 @@ query_col, summary_col = st.columns(MAIN_PAGE_COLS_SIZE, gap=MAIN_PAGE_COLS_GAP)
 with query_col:
     st.header("Search and Retrieve Sequences")
     st.markdown(NAVIGATE_WARNING_MD)
-    render_markdown("src/app/sequence_search_quick_guide.md")
+    render_markdown("sequence_search_quick_guide.md")
     # Streamlit form to capture search conditions
     with st.form("query"):
         database = st.selectbox("Select the database to search", ("nucleotide", "gene"))
@@ -110,4 +110,4 @@ with summary_col:
         st.header("Top Organisms")
         st.write(data_processing.get_top_organisms_counts(TOP_N_ORGANISMS))
 
-st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("Conservation X Labs CXL logo.png", use_column_width=True)

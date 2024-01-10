@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from app.common.data_processing import get_headers
+from common.data_processing import get_headers
 
 
 def test_get_header():
