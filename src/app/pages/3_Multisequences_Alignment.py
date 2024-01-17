@@ -89,10 +89,24 @@ with st.form("msa_cleanup"):
     config["section"] = {}
 
     with col1:
+        config["remove_divergent"]["remove_divergent"] = str(
+            st.toggle("Enable Divergent cleaning")
+        )
         config["remove_divergent"]["remove_divergent_minperc"] = st.text_input(
             "Remove Divergent - min_perc (0~1)",
             value="0.65",
             placeholder="Default: 0.65",
+        )
+        config["remove_short"]["remove_short"] = str(st.toggle("Enable Short cleaning"))
+        config["remove_short"]["remove_min_length"] = st.text_input(
+            "Remove Short - min_length",
+            value="50",
+            placeholder="Default: 50",
+        )
+
+    with col2:
+        config["remove_insertions"]["remove_insertions"] = str(
+            st.toggle("Enable Insertion cleaning")
         )
         config["remove_insertions"]["insertion_min_perc"] = st.text_input(
             "Remove Insertion - min_perc (0~1)",
@@ -104,8 +118,6 @@ with st.form("msa_cleanup"):
             value="3",
             placeholder="Default: 3",
         )
-
-    with col2:
         config["remove_insertions"]["insertion_max_size"] = st.text_input(
             "Remove Insertion - max_size",
             value="200",
@@ -116,13 +128,9 @@ with st.form("msa_cleanup"):
             value="5",
             placeholder="Default: 5",
         )
-        config["remove_short"]["remove_min_length"] = st.text_input(
-            "Remove Short - min_length",
-            value="50",
-            placeholder="Default: 50",
-        )
 
     with col3:
+        config["crop_ends"]["crop_ends"] = str(st.toggle("Enable Crop Ends cleaning"))
         config["crop_ends"]["crop_ends_mingap_perc"] = st.text_input(
             "Crop Ends - min_gap_perc (0~0.06)",
             value="0.05",
@@ -135,6 +143,9 @@ with st.form("msa_cleanup"):
         )
 
     with col4:
+        config["crop_divergent"]["crop_divergent"] = str(
+            st.toggle("Enable Crop Divergent cleaning")
+        )
         config["crop_divergent"]["crop_divergent_min_prop_ident"] = st.text_input(
             "Crop Divergent - min_prop_ident",
             value="0.5",
