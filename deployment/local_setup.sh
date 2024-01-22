@@ -13,4 +13,4 @@ conda activate negDia
 pip install -e ".[dev,docs]"
 
 # Start Seq2Dx
-streamlit run src/app/Home.py
+streamlit run src/app/Home.py --server.headless true
