@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Install essential linux packages
+sudo apt update
+sudo apt install build-essential
+sudo apt install mafft
+
 # Download 'neglected-diagonstics' repo to local
 git clone https://github.com/cxl-garage/neglected-diagnostics.git
 
