@@ -21,6 +21,9 @@ MSA_DF = "MSA_DF"
 MSA_VIEWER = "MSA_VIEWER"
 MSA_CLEAN_ZIP = "MSA_CLEAN_ZIP"
 
+# MSA viewer service url
+MSA_VIEWER_SERVICE_URL = "http://127.0.0.1:8050"
+
 # Streamlit UI
 PAGE_LAYOUT = "wide"
 MAIN_PAGE_COLS_SIZE = [0.8, 0.2]

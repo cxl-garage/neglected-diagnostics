@@ -6,7 +6,13 @@ import streamlit.components.v1 as components
 from common.render_method import render_markdown
 
 from app.common import setup
-from app.common.constants import MSA_CLEAN_ZIP, MSA_DF, MSA_VIEWER, NAVIGATE_WARNING_MD
+from app.common.constants import (
+    MSA_CLEAN_ZIP,
+    MSA_DF,
+    MSA_VIEWER,
+    MSA_VIEWER_SERVICE_URL,
+    NAVIGATE_WARNING_MD,
+)
 from app.common.setup import init_session_state_msa
 from app.frontend.download_data import download_msa_data
 from genetic_testing.sequence_tool.consensusSeq import ConsensusSeq, alignMs
@@ -33,16 +39,19 @@ with st.form("seq_viewer"):
     # Button to trigger viewer
     submitted = st.form_submit_button("Show sequence viewer")
     if submitted:
-        # Make sure kill other viewer threads
-        if st.session_state[MSA_VIEWER] is None:
-            st.session_state[MSA_VIEWER] = MsaViewer(multifastaFile)
-            st.session_state[MSA_VIEWER].run()
+        if not multifastaFile:
+            st.warning("Please upload a FASTA file for sequence viewer")
         else:
-            st.session_state[MSA_VIEWER].updateData(multifastaFile)
+            # Make sure kill other viewer threads
+            if st.session_state[MSA_VIEWER] is None:
+                st.session_state[MSA_VIEWER] = MsaViewer(multifastaFile)
+                st.session_state[MSA_VIEWER].run()
+            else:
+                st.session_state[MSA_VIEWER].updateData(multifastaFile)
 
-        components.iframe(
-            "http://127.0.0.1:8050/", width=1200, height=1200, scrolling=True
-        )
+            components.iframe(
+                MSA_VIEWER_SERVICE_URL, width=1200, height=1200, scrolling=True
+            )
 if multifastaFile is not None:
     consensus = ConsensusSeq(multifastaFile)
 
@@ -53,8 +62,9 @@ with st.form("multi_seq_alignment"):
     if submitted:
         if not multifastaFile:
             st.warning("Please upload a FASTA file before calculating.")
-        # Execute the alignment
-        st.session_state[MSA_DF] = alignMs(multifastaFile)
+        else:
+            # Execute the alignment
+            st.session_state[MSA_DF] = alignMs(multifastaFile)
 
 if not st.session_state[MSA_DF].empty:
     st.markdown("### Alignned multisequences")

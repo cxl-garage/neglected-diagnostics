@@ -81,8 +81,11 @@ def select_ref(aln, target, index=0):
 def iter_window(ref, window, slide_ind, aln, aln_l):
     j = 0
     seq_l = []
+    # Iterate over the reference
     while j < len(ref) - window:
+        # Track the start index
         startIdx = j + 1
+        # Get the primer sequence with start index
         primer_seq = (ref[j : j + window], startIdx)
         new_primer = detect_exact_seqs(primer_seq, aln_l, aln)
         seq_l.append(new_primer)
