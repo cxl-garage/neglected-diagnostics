@@ -1,8 +1,3 @@
-"""Demo App for Neglected Diagnostics.
-This is an app for neglected diagnostics built using Streamlit and Biopython.
-"""
-
-
 import pandas as pd
 import streamlit as st
 from common.render_method import render_markdown

@@ -3,6 +3,7 @@ This script is taken from the Thylacine_Design repository (https://github.com/km
 
 Link to this script: https://github.com/kmceres/Thylacine_Design/blob/main/general_primer_design/scripts/Primer_opt.py
 """
+
 import re
 from copy import deepcopy
 from io import StringIO
