@@ -15,6 +15,15 @@ SEQVAR_TABLE = "SEQVAR_TABLE"
 TGT_AREA_FORM = "TGT_AREA_FORM"
 TGT_AREA_DF = "TGT_AREA_DF"
 
+# Session State Keys for Multisequence Alignment page
+MSA_FORM = "MSA_FORM"
+MSA_DF = "MSA_DF"
+MSA_VIEWER = "MSA_VIEWER"
+MSA_CLEAN_ZIP = "MSA_CLEAN_ZIP"
+
+# MSA viewer service url
+MSA_VIEWER_SERVICE_URL = "http://127.0.0.1:8050"
+
 # Streamlit UI
 PAGE_LAYOUT = "wide"
 MAIN_PAGE_COLS_SIZE = [0.8, 0.2]

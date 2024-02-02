@@ -52,7 +52,7 @@ with st.form("seq_haplotypes"):
 
 
 # Display the sequence variability data
-if st.session_state[SEQVAR_DF] is not None:
+if not st.session_state[SEQVAR_DF].empty:
     st.write("Sequence Variability Data:")
     st.dataframe(st.session_state[SEQVAR_DF])
 

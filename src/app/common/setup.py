@@ -2,6 +2,10 @@ import pandas as pd
 import streamlit as st
 
 from app.common.constants import (
+    MSA_CLEAN_ZIP,
+    MSA_DF,
+    MSA_FORM,
+    MSA_VIEWER,
     NCBI_DF,
     NCBI_DF_FILTER,
     NCBI_SUMMARY_FORM,
@@ -54,6 +58,15 @@ def init_session_state_tgt_area() -> None:
     if TGT_AREA_FORM not in st.session_state:
         st.session_state[TGT_AREA_FORM] = False
         st.session_state[TGT_AREA_DF] = pd.DataFrame()
+
+
+def init_session_state_msa() -> None:
+    """Initialize the Streamlit session state for the Multisequences Alignment page."""
+    if MSA_FORM not in st.session_state:
+        st.session_state[MSA_FORM] = False
+        st.session_state[MSA_VIEWER] = None
+        st.session_state[MSA_CLEAN_ZIP] = None
+        st.session_state[MSA_DF] = pd.DataFrame()
 
 
 def initialize() -> None:
