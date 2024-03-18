@@ -94,7 +94,7 @@ def iter_window(ref, window, slide_ind, aln, aln_l):
     return seq_l
 
 
-def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
+def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot, progress_bar):
     # for low matches and no matches, get hamming dist
     primers_l = []
     matches = []  # number of exact matches
@@ -103,6 +103,10 @@ def detect_fuzzy_matches(seq_l, aln_l, off, aln, maxDif_t, maxDif_ot):
     off_snps = []  # avg hamming distance primer-off
     if len(seq_l) > 0:
         for i in range(len(seq_l)):
+            progress_bar.progress(
+                round(30 + (((i + 1) / len(seq_l)) * 60)),
+                text=f"Investigating sequence: {i + 1} / {len(seq_l)}",
+            )
             primer_seqContent = seq_l[i].primer_seq[0]
             new_target = calc_nuc_dif(primer_seqContent, aln_l, aln, maxDif_t)
             new_off_target = calc_nuc_dif(primer_seqContent, off, aln, maxDif_ot)
@@ -124,7 +128,6 @@ def write_out(ref, primers_l, target_snps, target_snps_bpwise, matches, off_snps
             cols.assay_design_area: primers_l_seqContent,
             cols.assay_design_area_start: primers_l_startIndex,
             cols.assay_design_area_end: primers_l_endIndex,
-            cols.assay_design_area_reference: ref,
             cols.perc_tgt_match: matches,
             cols.ratio_tgt_mismatch: target_snps,
             cols.bpwise_error_percentage_tgt_mismatch: target_snps_bpwise,
@@ -191,20 +194,24 @@ def find_target_area(
     target_files,
     off_target_files,
     reference_sequence,
+    progress_bar,
     window=300,
     slide=20,
     maxDif_t=5,
     maxDif_ot=15,
 ):
+    progress_bar.progress(1, text="Importing files...")
     aln, labs, target, off, index = import_files(
         target_files, off_target_files, reference_sequence
     )
 
     if index == -1:
         raise ValueError("Reference sequence not found in the target files")
-
+    progress_bar.progress(5, text="Selecting ref...")
     aln_l, ref = select_ref(aln, target, index=index)
+    progress_bar.progress(10, text="Finding windows...")
     seq_l = iter_window(ref, window=window, slide_ind=slide, aln=aln, aln_l=aln_l)
+    progress_bar.progress(30, text="Finding matches...")
     (
         primers_l,
         target_snps,
@@ -212,8 +219,15 @@ def find_target_area(
         matches,
         off_snps,
     ) = detect_fuzzy_matches(
-        seq_l, aln_l, off, aln, maxDif_t=maxDif_t, maxDif_ot=maxDif_ot
+        seq_l,
+        aln_l,
+        off,
+        aln,
+        maxDif_t=maxDif_t,
+        maxDif_ot=maxDif_ot,
+        progress_bar=progress_bar,
     )
+    progress_bar.progress(90, text="Writing output...")
     df = write_out(ref, primers_l, target_snps, target_snps_bpwise, matches, off_snps)
-
+    progress_bar.progress(100, text="Complete")
     return df

@@ -1,4 +1,5 @@
 import streamlit as st
+import time
 from common.render_method import render_markdown
 
 from app.common import setup
@@ -108,25 +109,35 @@ with target_area_container:
         # Button to trigger target area calculation
         submitted = st.form_submit_button("Find Assay Design Area")
         if submitted:
-            # Find the target area
-            try:
-                df = find_target_area(
-                    target_files=target_files,
-                    off_target_files=off_target_files,
-                    reference_sequence=reference_sequence,
-                    window=tgt_region_size,
-                    slide=slide_size,
-                    maxDif_t=max_differenc_o,
-                    maxDif_ot=max_difference_ot,
-                )
-                target_id_col = df.index.map(lambda i: f"{TARGET_AREA_PREFIX}{i+1}")
-                df.insert(loc=0, column=cols.target_id, value=target_id_col)
-                st.session_state[TGT_AREA_DF] = df
-                st.session_state[TGT_AREA_FORM] = True
-            except ValueError as e:
-                # Handle the case where an error occurs during target area calculation
-                st.error(e)
+            if len(target_files) < 2:
+                st.error("A minimum of 2 Target Sequence files are required.")
                 st.session_state[TGT_AREA_FORM] = False
+            else:
+                progress_bar = st.progress(0, text="Beginning process...")
+                # Find the target area
+                try:
+                    df = find_target_area(
+                        target_files=target_files,
+                        off_target_files=off_target_files,
+                        reference_sequence=reference_sequence,
+                        progress_bar=progress_bar,
+                        window=tgt_region_size,
+                        slide=slide_size,
+                        maxDif_t=max_differenc_o,
+                        maxDif_ot=max_difference_ot,
+                    )
+                    target_id_col = df.index.map(lambda i: f"{TARGET_AREA_PREFIX}{i+1}")
+                    ref_col = df.index.map(lambda i: reference_sequence)
+                    df.insert(
+                        loc=0, column=cols.assay_design_area_reference, value=ref_col
+                    )
+                    df.insert(loc=0, column=cols.target_id, value=target_id_col)
+                    st.session_state[TGT_AREA_DF] = df
+                    st.session_state[TGT_AREA_FORM] = True
+                except ValueError as e:
+                    # Handle the case where an error occurs during target area calculation
+                    st.error(e)
+                    st.session_state[TGT_AREA_FORM] = False
 
 # If target area has been successfully calculated, display it and provide download options
 if st.session_state[TGT_AREA_FORM]:
