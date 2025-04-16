@@ -14,7 +14,7 @@ Genetic testing is routinely relied upon to detect illegal trafficking of wildli
 
 SSEC is working with Conservation X Labs to build an easy-to-use platform that enables researchers to rapidly create genetic tests for every pest, pathogen, or species in the field. This new platform and corresponding tools will enable the community to better monitor and protect vulnerable ecosystems. 
 
-[More Project Details](https://escience.washington.edu/ssec-2023-neglected-diagnostics/)
+[More Project Details](https://escience.washington.edu/neglected-diagnostics-democratizing-genetic-testing/)
 
 ## Open source licensing
 
