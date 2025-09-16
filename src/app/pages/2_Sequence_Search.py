@@ -81,13 +81,15 @@ def convert_search_result_to_df(search_results: Dict) -> pd.DataFrame:
                         "Length": int(seq.length) if seq.length else 0,
                         "Database": str(db_name),
                         "Marker": seq.marker.value if seq.marker else "",
-                        "Quality Score": f"{seq.quality_score:.3f}"
-                        if seq.quality_score
-                        else "",
+                        "Quality Score": (
+                            f"{seq.quality_score:.3f}" if seq.quality_score else ""
+                        ),
                         "Country": str(seq.country) if seq.country else "",
-                        "Create Date": seq.create_date.strftime("%Y-%m-%d")
-                        if seq.create_date
-                        else "",
+                        "Create Date": (
+                            seq.create_date.strftime("%Y-%m-%d")
+                            if seq.create_date
+                            else ""
+                        ),
                     }
                     all_sequences.append(seq_dict)
 

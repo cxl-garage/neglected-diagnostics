@@ -1,7 +1,7 @@
 """
 BOLD Database Client
 
-This module provides integration with the Barcode of Life Database (BOLD) for COI 
+This module provides integration with the Barcode of Life Database (BOLD) for COI
 barcode sequences as specified in Phase 1.2 of the roadmap.
 """
 

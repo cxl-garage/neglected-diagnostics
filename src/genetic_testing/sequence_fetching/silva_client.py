@@ -1,7 +1,7 @@
 """
 SILVA Database Client
 
-This module provides integration with the SILVA rRNA database for 16S/18S/23S/28S 
+This module provides integration with the SILVA rRNA database for 16S/18S/23S/28S
 sequences as specified in Phase 1.2 of the roadmap.
 """
 
