@@ -1,5 +1,6 @@
-import streamlit as st
 import time
+
+import streamlit as st
 from common.render_method import render_markdown
 
 from app.common import setup
@@ -10,7 +11,7 @@ from genetic_testing.assay_target.datatypes import AssayTargetColumns
 from genetic_testing.assay_target.primer_design import find_target_area
 
 setup.initialize()
-st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", width="stretch")
 
 
 # Initialize the Streamlit session state for this page
