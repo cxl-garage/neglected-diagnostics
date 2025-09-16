@@ -1,4 +1,4 @@
-""" 
+"""
 This script is taken from the Thylacine_Design repository (https://github.com/kmceres/Thylacine_Design/tree/main). It is used to to detect target sequences among whole genome sequences, or gene sequences and off-target genomes/genes.
 
 Link to this script: https://github.com/kmceres/Thylacine_Design/blob/main/general_primer_design/scripts/Primer_opt.py

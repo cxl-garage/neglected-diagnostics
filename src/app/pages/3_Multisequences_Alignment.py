@@ -19,7 +19,7 @@ from genetic_testing.sequence_tool.consensusSeq import ConsensusSeq, alignMs
 from genetic_testing.sequence_tool.msaViewer import MsaViewer, msa_cleaner
 
 setup.initialize()
-st.sidebar.image("src/app/Conservation X Labs CXL logo.png", use_column_width=True)
+st.sidebar.image("src/app/Conservation X Labs CXL logo.png", width="stretch")
 
 # Initialize the Streamlit session state for this page
 init_session_state_msa()

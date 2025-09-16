@@ -1,3 +1,4 @@
 biopython>=1.81
 streamlit-aggrid>=0.3.4
+bioblend>=1.2.0
 git+https://github.com/aniketfadia96/neglected-diagnostics.git@assay-target

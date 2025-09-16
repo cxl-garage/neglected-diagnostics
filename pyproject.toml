@@ -22,7 +22,17 @@ dependencies = [
     "fuzzysearch>=0.7.3",
     "streamlit-aggrid>=0.3.4",
     "dash-bio",
-    "cialign"
+    "cialign",
+    "bioblend>=1.2.0",
+    "openai>=1.0.0",
+    "requests>=2.25.0",
+    "galaxy-mcp>=1.1.0",
+    "mcp>=1.0.0",
+    # Phase 1 Enhanced Dependencies (using available packages only)
+    "requests-cache>=1.0.0",
+    "aiohttp>=3.8.0",
+    "httpx>=0.24.0",
+    "pandas>=1.5.0"
 ]
 
 # On a mac, install optional dependencies with `pip install '.[dev]'` (include the single quotes)

@@ -1,6 +1,6 @@
-"""Module to search and download sequence data from the NCBI datasource. 
+"""Module to search and download sequence data from the NCBI datasource.
 
-This module is still work in progress. Currently, I am working on implementing the search 
+This module is still work in progress. Currently, I am working on implementing the search
 functionality
 """
 

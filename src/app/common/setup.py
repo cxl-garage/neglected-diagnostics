@@ -2,6 +2,13 @@ import pandas as pd
 import streamlit as st
 
 from app.common.constants import (
+    CONVERSATION_HISTORY,
+    GALAXY_CONNECTION,
+    GALAXY_TOOLS,
+    LLM_CONFIG,
+    LLM_PROVIDER,
+    MCP_CONNECTION,
+    MCP_SERVER_PROCESS,
     MSA_CLEAN_ZIP,
     MSA_DF,
     MSA_FORM,
@@ -16,6 +23,7 @@ from app.common.constants import (
     SEQVAR_TABLE_CALC,
     TGT_AREA_DF,
     TGT_AREA_FORM,
+    WORKFLOW_PLAN,
 )
 
 
@@ -49,30 +57,59 @@ def init_session_state_seq_var_table() -> None:
     """Initialize the Streamlit session state for the Sequence Variability Table."""
     if SEQVAR_TABLE_BTN not in st.session_state:
         st.session_state[SEQVAR_TABLE_BTN] = False
+
+    if SEQVAR_TABLE_CALC not in st.session_state:
         st.session_state[SEQVAR_TABLE_CALC] = False
+
+    if SEQVAR_TABLE not in st.session_state:
         st.session_state[SEQVAR_TABLE] = pd.DataFrame()
 
 
+def init_session_state_msa() -> None:
+    """Initialize the Streamlit session state for the Multisequence Alignment page."""
+    if MSA_FORM not in st.session_state:
+        st.session_state[MSA_FORM] = False
+
+    if MSA_DF not in st.session_state:
+        st.session_state[MSA_DF] = pd.DataFrame()
+
+    if MSA_VIEWER not in st.session_state:
+        st.session_state[MSA_VIEWER] = None
+
+    if MSA_CLEAN_ZIP not in st.session_state:
+        st.session_state[MSA_CLEAN_ZIP] = None
+
+
 def init_session_state_tgt_area() -> None:
-    """Initialize the Streamlit session state for the Find Assay Target Area page."""
+    """Initialize the Streamlit session state for the Target Area page."""
     if TGT_AREA_FORM not in st.session_state:
         st.session_state[TGT_AREA_FORM] = False
+
+    if TGT_AREA_DF not in st.session_state:
         st.session_state[TGT_AREA_DF] = pd.DataFrame()
 
 
-def init_session_state_msa() -> None:
-    """Initialize the Streamlit session state for the Multisequences Alignment page."""
-    if MSA_FORM not in st.session_state:
-        st.session_state[MSA_FORM] = False
-        st.session_state[MSA_VIEWER] = None
-        st.session_state[MSA_CLEAN_ZIP] = None
-        st.session_state[MSA_DF] = pd.DataFrame()
+def init_session_state_galaxy_assistant() -> None:
+    """Initialize the Streamlit session state for Galaxy Workflow Assistant."""
+    if GALAXY_CONNECTION not in st.session_state:
+        st.session_state[GALAXY_CONNECTION] = None
+    if GALAXY_TOOLS not in st.session_state:
+        st.session_state[GALAXY_TOOLS] = []
+    if CONVERSATION_HISTORY not in st.session_state:
+        st.session_state[CONVERSATION_HISTORY] = []
+    if WORKFLOW_PLAN not in st.session_state:
+        st.session_state[WORKFLOW_PLAN] = None
+    if LLM_PROVIDER not in st.session_state:
+        st.session_state[LLM_PROVIDER] = "openai"
+    if LLM_CONFIG not in st.session_state:
+        st.session_state[LLM_CONFIG] = {}
+    if MCP_SERVER_PROCESS not in st.session_state:
+        st.session_state[MCP_SERVER_PROCESS] = None
+    if MCP_CONNECTION not in st.session_state:
+        st.session_state[MCP_CONNECTION] = None
 
 
 def initialize() -> None:
-    """Initialize the Streamlit application
-
-    This function sets up the necessary UI configurations and session states for the application.
-    """
+    """Initialize the Streamlit app by setting up the UI and session state."""
     _initialize_UI()
     _initialize_session_state()
