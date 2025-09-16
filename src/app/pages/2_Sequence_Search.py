@@ -253,7 +253,9 @@ with query_col:
                         st.info("ℹ️ API Key: Not configured (3 req/sec)")
 
         # Debug option
-        if st.checkbox("🔧 Enable Debug Mode", help="Show detailed logging information"):
+        if st.checkbox(
+            "🔧 Enable Debug Mode", help="Show detailed logging information"
+        ):
             st.info("Debug mode enabled - check logs for detailed information")
 
     except (FileNotFoundError, AttributeError, KeyError):
