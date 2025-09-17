@@ -10,6 +10,10 @@ from utils.log import _init_logger
 
 logger = _init_logger(__name__)
 
+from app.assistant.popup_chat import render_expander_popup_chat
+
+# Import agentic assistant
+from app.assistant.ui_components import AssistantIntegration
 from app.common import data_processing, setup
 from app.common.constants import (
     MAIN_PAGE_COLS_GAP,
@@ -51,6 +55,9 @@ if "selected_databases" not in st.session_state:
     st.session_state.selected_databases = ["nucleotide"]
 if "search_mode" not in st.session_state:
     st.session_state.search_mode = "basic"
+
+# Initialize assistant integration
+assistant = AssistantIntegration()
 
 # Define constants for download options
 CSV_DOWNLOAD = "Download table as CSV"
@@ -231,6 +238,8 @@ with query_col:
     )
     st.markdown(NAVIGATE_WARNING_MD)
 
+    # Assistant integration handled by popup bubble
+
     # Show NCBI configuration status
     try:
         email_configured = bool(st.secrets.get("ENTREZ_EMAIL", ""))
@@ -253,10 +262,10 @@ with query_col:
                         st.info("ℹ️ API Key: Not configured (3 req/sec)")
 
         # Debug option
-        if st.checkbox(
-            "🔧 Enable Debug Mode", help="Show detailed logging information"
-        ):
+        if st.checkbox("🔧 Enable Debug Mode", help="Show detailed logging information"):
             st.info("Debug mode enabled - check logs for detailed information")
+
+        # Assistant available via popup bubble at bottom-right
 
     except (FileNotFoundError, AttributeError, KeyError):
         pass  # Secrets not available
@@ -869,3 +878,6 @@ with summary_col:
                 st.write(data_processing.get_top_organisms_counts(TOP_N_ORGANISMS))
 
 st.sidebar.image("src/app/Conservation X Labs CXL logo.png", width="stretch")
+
+# Add expander popup chat (guaranteed to work)
+render_expander_popup_chat("Sequence_Search")
